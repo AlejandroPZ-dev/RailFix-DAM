@@ -1,0 +1,39 @@
+<section class="page">
+  <header class="page-header">
+    <h2>{{ 'tecnico.report.title' | translate }}</h2>
+    <p>{{ 'tecnico.report.subtitle' | translate }}</p>
+    <a routerLink="../">{{ 'tecnico.common.back' | translate }}</a>
+  </header>
+
+  <form class="form-card" [formGroup]="form" (ngSubmit)="submit()">
+    <label class="full-width">
+      <span>{{ 'tecnico.report.fields.descripcionReporte' | translate }}</span>
+      <textarea rows="5" formControlName="descripcionReporte"></textarea>
+    </label>
+
+    <label>
+      <span>{{ 'tecnico.report.fields.urgenciaSugerida' | translate }}</span>
+      <select formControlName="urgenciaSugerida">
+        <option *ngFor="let urgencia of urgencias" [ngValue]="urgencia">
+          {{ urgencia ? (('incidenciaUrgencia.' + urgencia) | translate) : ('tecnico.report.emptyUrgency' | translate) }}
+        </option>
+      </select>
+    </label>
+
+    <label class="checkbox">
+      <input type="checkbox" formControlName="requiereMasTecnicos">
+      <span>{{ 'tecnico.report.fields.requiereMasTecnicos' | translate }}</span>
+    </label>
+
+    <label class="checkbox">
+      <input type="checkbox" formControlName="incidenciaResuelta">
+      <span>{{ 'tecnico.report.fields.incidenciaResuelta' | translate }}</span>
+    </label>
+
+    <div class="actions full-width">
+      <button type="submit" [disabled]="isSubmitting">
+        {{ 'tecnico.report.submit' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

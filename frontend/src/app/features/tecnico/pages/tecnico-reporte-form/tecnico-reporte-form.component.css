@@ -1,0 +1,64 @@
+.page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.page-header h2,
+.page-header p {
+  margin: 0;
+}
+
+.page-header p {
+  margin-top: 0.35rem;
+  color: var(--color-text-muted);
+}
+
+.form-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-surface);
+}
+
+.form-card label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.form-card textarea,
+.form-card select {
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.checkbox {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox input {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.actions button {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-primary);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.actions button:disabled {
+  opacity: 0.7;
+  cursor: default;
+}

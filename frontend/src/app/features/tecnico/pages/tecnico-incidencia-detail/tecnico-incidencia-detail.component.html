@@ -1,0 +1,54 @@
+<section *ngIf="!isLoading && incidencia; else detailState" class="page">
+  <header class="page-header">
+    <h2>{{ 'tecnico.detail.title' | translate:{ id: incidencia.id } }}</h2>
+    <p>{{ incidencia.titulo }}</p>
+  </header>
+
+  <section class="detail-card">
+    <div><strong>{{ 'tecnico.detail.fields.id' | translate }}:</strong> {{ incidencia.id }}</div>
+    <div><strong>{{ 'tecnico.detail.fields.linea' | translate }}:</strong> {{ incidencia.lineaNombre }}</div>
+    <div><strong>{{ 'tecnico.detail.fields.via' | translate }}:</strong> {{ incidencia.viaNombre }}</div>
+    <div><strong>{{ 'tecnico.detail.fields.puntoKilometrico' | translate }}:</strong> {{ incidencia.puntoKilometrico }}</div>
+    <div><strong>{{ 'tecnico.detail.fields.urgencia' | translate }}:</strong> {{ ('incidenciaUrgencia.' + incidencia.urgencia) | translate }}</div>
+    <div><strong>{{ 'tecnico.detail.fields.estado' | translate }}:</strong> {{ ('incidenciaEstado.' + incidencia.estado) | translate }}</div>
+    <div><strong>{{ 'tecnico.detail.fields.fechaCreacion' | translate }}:</strong> {{ incidencia.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</div>
+    <div><strong>{{ 'tecnico.detail.fields.fechaActualizacion' | translate }}:</strong> {{ incidencia.fechaActualizacion | date:'dd/MM/yyyy HH:mm' }}</div>
+    <div *ngIf="incidencia.fechaCierre"><strong>{{ 'tecnico.detail.fields.fechaCierre' | translate }}:</strong> {{ incidencia.fechaCierre | date:'dd/MM/yyyy HH:mm' }}</div>
+    <div><strong>{{ 'tecnico.detail.fields.estadoAsignacion' | translate }}:</strong> {{ ('estadoAsignacion.' + incidencia.estadoAsignacion) | translate }}</div>
+    <div><strong>{{ 'tecnico.detail.fields.fechaAsignacion' | translate }}:</strong> {{ incidencia.fechaAsignacion | date:'dd/MM/yyyy HH:mm' }}</div>
+    <div class="full-width"><strong>{{ 'tecnico.detail.fields.descripcion' | translate }}:</strong> {{ incidencia.descripcion }}</div>
+  </section>
+
+  <section class="detail-card">
+    <div class="reports-header">
+      <h3>{{ 'tecnico.detail.reportsTitle' | translate }}</h3>
+      <a class="report-link" [routerLink]="['/tecnico/incidencias', incidencia.id, 'reporte']">
+        {{ 'tecnico.detail.createReport' | translate }}
+      </a>
+    </div>
+
+    <div *ngIf="reportes.length === 0" class="muted">
+      {{ 'tecnico.detail.noReports' | translate }}
+    </div>
+
+    <article *ngFor="let reporte of reportes" class="report-card">
+      <p>{{ reporte.descripcionReporte }}</p>
+      <small *ngIf="reporte.urgenciaSugerida">
+        {{ 'tecnico.detail.reportUrgency' | translate }}:
+        {{ ('incidenciaUrgencia.' + reporte.urgenciaSugerida) | translate }}
+      </small>
+      <small>{{ 'tecnico.detail.reportRequiresMore' | translate }}: {{ reporte.requiereMasTecnicos ? ('common.yes' | translate) : ('common.no' | translate) }}</small>
+      <small>{{ 'tecnico.detail.reportResolved' | translate }}: {{ reporte.incidenciaResuelta ? ('common.yes' | translate) : ('common.no' | translate) }}</small>
+      <small>{{ reporte.fechaReporte | date:'dd/MM/yyyy HH:mm' }}</small>
+    </article>
+  </section>
+</section>
+
+<ng-template #detailState>
+  <section class="page">
+    <section class="detail-card">
+      <p *ngIf="isLoading" class="muted">{{ 'tecnico.detail.loading' | translate }}</p>
+      <p *ngIf="!isLoading && loadErrorKey" class="muted">{{ loadErrorKey | translate }}</p>
+    </section>
+  </section>
+</ng-template>

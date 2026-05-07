@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "RailFix DAM",
+    "subtitle": "Basic railway incident management"
+  },
+  "languages": {
+    "es": "Spanish",
+    "en": "English"
+  },
+  "roles": {
+    "OPERARIO": "Operator",
+    "ADMINISTRADOR": "Administrator",
+    "TECNICO": "Technician"
+  },
+  "layout": {
+    "language": "Language",
+    "role": "Role",
+    "navigation": "Navigation"
+  },
+  "nav": {
+    "login": "Login",
+    "incidencias": "Incidents"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Initial structure for user access",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Enter"
+  },
+  "incidencias": {
+    "title": "Incidents",
+    "subtitle": "Initial view to browse incidents",
+    "placeholder": "The incident list and filters will be added in later steps."
+  }
+}
+

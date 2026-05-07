@@ -1,0 +1,73 @@
+<section class="page">
+  <header class="page-header">
+    <h2>{{ 'operario.list.title' | translate }}</h2>
+    <p>{{ 'operario.list.subtitle' | translate }}</p>
+  </header>
+
+  <section class="filters">
+    <label>
+      <span>{{ 'operario.list.filters.estado' | translate }}</span>
+      <select [(ngModel)]="filters.estado">
+        <option value="">{{ 'operario.list.filters.all' | translate }}</option>
+        <option *ngFor="let estado of estados" [value]="estado">
+          {{ ('incidenciaEstado.' + estado) | translate }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>{{ 'operario.list.filters.urgencia' | translate }}</span>
+      <select [(ngModel)]="filters.urgencia">
+        <option value="">{{ 'operario.list.filters.all' | translate }}</option>
+        <option *ngFor="let urgencia of urgencias" [value]="urgencia">
+          {{ ('incidenciaUrgencia.' + urgencia) | translate }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>{{ 'operario.list.filters.linea' | translate }}</span>
+      <select [(ngModel)]="filters.lineaId">
+        <option value="">{{ 'operario.list.filters.all' | translate }}</option>
+        <option *ngFor="let linea of lineas" [value]="linea.id">
+          {{ linea.nombre }}
+        </option>
+      </select>
+    </label>
+  </section>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ 'operario.list.columns.id' | translate }}</th>
+          <th>{{ 'operario.list.columns.titulo' | translate }}</th>
+          <th>{{ 'operario.list.columns.linea' | translate }}</th>
+          <th>{{ 'operario.list.columns.via' | translate }}</th>
+          <th>{{ 'operario.list.columns.puntoKilometrico' | translate }}</th>
+          <th>{{ 'operario.list.columns.urgencia' | translate }}</th>
+          <th>{{ 'operario.list.columns.estado' | translate }}</th>
+          <th>{{ 'operario.list.columns.fechaCreacion' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="isLoading">
+          <td colspan="8" class="empty-row">{{ 'operario.list.loading' | translate }}</td>
+        </tr>
+        <tr *ngFor="let incidencia of filteredIncidencias">
+          <td>{{ incidencia.id }}</td>
+          <td>{{ incidencia.titulo }}</td>
+          <td>{{ incidencia.lineaNombre }}</td>
+          <td>{{ incidencia.viaNombre }}</td>
+          <td>{{ incidencia.puntoKilometrico }}</td>
+          <td>{{ ('incidenciaUrgencia.' + incidencia.urgencia) | translate }}</td>
+          <td>{{ ('incidenciaEstado.' + incidencia.estado) | translate }}</td>
+          <td>{{ incidencia.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+        <tr *ngIf="!isLoading && filteredIncidencias.length === 0">
+          <td colspan="8" class="empty-row">{{ 'operario.list.empty' | translate }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

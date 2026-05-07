@@ -1,0 +1,42 @@
+<div class="shell">
+  <header class="topbar">
+    <div>
+      <h1>{{ 'app.title' | translate }}</h1>
+      <p>{{ 'app.subtitle' | translate }}</p>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-item">
+        <span>{{ 'layout.role' | translate }}</span>
+        <div class="role-display">
+          {{ ('roles.' + currentRole) | translate }}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <aside class="sidebar">
+      <h2>{{ 'layout.navigation' | translate }}</h2>
+      <nav>
+        <a
+          *ngFor="let item of navigationItems"
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [class.hidden]="!isVisibleForRole(item)"
+        >
+          {{ item.labelKey | translate }}
+        </a>
+      </nav>
+
+      <button type="button" class="logout-button" (click)="logout()">
+        {{ 'layout.logout' | translate }}
+      </button>
+    </aside>
+
+    <main class="main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

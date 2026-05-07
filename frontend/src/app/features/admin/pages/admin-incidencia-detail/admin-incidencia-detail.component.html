@@ -1,0 +1,140 @@
+<section *ngIf="!isLoading && incidencia; else detailState" class="page">
+  <header class="page-header">
+    <h2>{{ 'admin.detail.title' | translate:{ id: incidencia.id } }}</h2>
+    <p>{{ incidencia.titulo }}</p>
+  </header>
+
+  <section class="detail-card detail-grid">
+    <div><strong>{{ 'admin.detail.fields.id' | translate }}:</strong> {{ incidencia.id }}</div>
+    <div><strong>{{ 'admin.detail.fields.titulo' | translate }}:</strong> {{ incidencia.titulo }}</div>
+    <div><strong>{{ 'admin.detail.fields.linea' | translate }}:</strong> {{ incidencia.lineaNombre }}</div>
+    <div><strong>{{ 'admin.detail.fields.via' | translate }}:</strong> {{ incidencia.viaNombre }}</div>
+    <div><strong>{{ 'admin.detail.fields.puntoKilometrico' | translate }}:</strong> {{ incidencia.puntoKilometrico }}</div>
+    <div><strong>{{ 'admin.detail.fields.urgencia' | translate }}:</strong> {{ ('incidenciaUrgencia.' + incidencia.urgencia) | translate }}</div>
+    <div><strong>{{ 'admin.detail.fields.estado' | translate }}:</strong> {{ ('incidenciaEstado.' + incidencia.estado) | translate }}</div>
+    <div><strong>{{ 'admin.detail.fields.operarioCreador' | translate }}:</strong> {{ incidencia.operarioCreadorNombre }}</div>
+    <div><strong>{{ 'admin.detail.fields.fechaCreacion' | translate }}:</strong> {{ incidencia.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</div>
+    <div><strong>{{ 'admin.detail.fields.fechaActualizacion' | translate }}:</strong> {{ incidencia.fechaActualizacion | date:'dd/MM/yyyy HH:mm' }}</div>
+    <div *ngIf="incidencia.fechaCierre"><strong>{{ 'admin.detail.fields.fechaCierre' | translate }}:</strong> {{ incidencia.fechaCierre | date:'dd/MM/yyyy HH:mm' }}</div>
+    <div class="full-width"><strong>{{ 'admin.detail.fields.descripcion' | translate }}:</strong> {{ incidencia.descripcion }}</div>
+  </section>
+
+  <section class="detail-card">
+    <h3>{{ 'admin.detail.updateDescriptionTitle' | translate }}</h3>
+
+    <div class="form-stack">
+      <label>
+        <span>{{ 'admin.detail.fields.descripcion' | translate }}</span>
+        <textarea rows="5" [(ngModel)]="descriptionValue"></textarea>
+      </label>
+
+      <button type="button" (click)="saveDescription()" [disabled]="isSavingDescription">
+        {{ 'admin.detail.updateDescriptionAction' | translate }}
+      </button>
+    </div>
+  </section>
+
+  <section class="detail-card">
+    <h3>{{ 'admin.detail.updateStatusTitle' | translate }}</h3>
+
+    <div class="form-inline">
+      <label>
+        <span>{{ 'admin.detail.fields.estado' | translate }}</span>
+        <select [(ngModel)]="estadoValue">
+          <option *ngFor="let estado of estados" [value]="estado">
+            {{ ('incidenciaEstado.' + estado) | translate }}
+          </option>
+        </select>
+      </label>
+
+      <button type="button" (click)="saveStatus()" [disabled]="isSavingStatus">
+        {{ 'admin.detail.updateStatusAction' | translate }}
+      </button>
+    </div>
+  </section>
+
+  <section class="detail-card">
+    <h3>{{ 'admin.detail.assignedTechnicians' | translate }}</h3>
+
+    <ul *ngIf="asignaciones.length > 0" class="list">
+      <li *ngFor="let asignacion of asignaciones">
+        <div class="assignment-row">
+          <span>
+            {{ asignacion.tecnicoNombre }} - {{ ('estadoAsignacion.' + asignacion.estadoAsignacion) | translate }}
+            <span class="muted">({{ asignacion.fechaAsignacion | date:'dd/MM/yyyy HH:mm' }})</span>
+          </span>
+          <button type="button" class="secondary-button" (click)="removeAsignacion(asignacion)">
+            {{ 'admin.detail.removeAction' | translate }}
+          </button>
+        </div>
+      </li>
+    </ul>
+
+    <p *ngIf="asignaciones.length === 0" class="muted">
+      {{ 'admin.detail.noAssignments' | translate }}
+    </p>
+
+    <div class="assign-box">
+      <label>
+        <span>{{ 'admin.detail.assignLabel' | translate }}</span>
+        <select multiple [(ngModel)]="selectedTecnicoIds">
+          <option *ngFor="let tecnico of availableTecnicos" [ngValue]="tecnico.idUsuario">
+            {{ tecnico.nombre }} {{ tecnico.apellidos }}
+          </option>
+        </select>
+      </label>
+
+      <button type="button" (click)="assignTecnicos()" [disabled]="isAssigning || availableTecnicos.length === 0">
+        {{ 'admin.detail.assignAction' | translate }}
+      </button>
+    </div>
+  </section>
+
+  <section class="detail-card">
+    <h3>{{ 'admin.detail.historyTitle' | translate }}</h3>
+
+    <ul *ngIf="historial.length > 0" class="list">
+      <li *ngFor="let item of historial">
+        <strong>{{ ('historialAccion.' + item.accion) | translate }}</strong> - {{ item.usuarioNombre }} - {{ item.fechaAccion | date:'dd/MM/yyyy HH:mm' }}
+        <div class="muted" *ngIf="item.estadoAnterior || item.estadoNuevo">
+          {{ item.estadoAnterior ? (('incidenciaEstado.' + item.estadoAnterior) | translate) : '-' }}
+          ->
+          {{ item.estadoNuevo ? (('incidenciaEstado.' + item.estadoNuevo) | translate) : '-' }}
+        </div>
+        <div class="muted" *ngIf="item.comentario">{{ item.comentario }}</div>
+      </li>
+    </ul>
+
+    <p *ngIf="historial.length === 0" class="muted">
+      {{ 'admin.detail.noHistory' | translate }}
+    </p>
+  </section>
+
+  <section class="detail-card">
+    <h3>{{ 'admin.detail.reportsTitle' | translate }}</h3>
+
+    <ul *ngIf="reportes.length > 0" class="list">
+      <li *ngFor="let reporte of reportes">
+        <strong>{{ reporte.tecnicoNombre }}</strong> - {{ reporte.fechaReporte | date:'dd/MM/yyyy HH:mm' }}
+        <div>{{ reporte.descripcionReporte }}</div>
+        <div class="muted">
+          {{ 'admin.detail.reportUrgency' | translate }}:
+          {{ reporte.urgenciaSugerida ? (('incidenciaUrgencia.' + reporte.urgenciaSugerida) | translate) : ('admin.detail.noSuggestedUrgency' | translate) }}
+        </div>
+      </li>
+    </ul>
+
+    <p *ngIf="reportes.length === 0" class="muted">
+      {{ 'admin.detail.noReports' | translate }}
+    </p>
+  </section>
+</section>
+
+<ng-template #detailState>
+  <section class="page">
+    <section class="detail-card">
+      <p *ngIf="isLoading" class="muted">{{ 'admin.detail.loading' | translate }}</p>
+      <p *ngIf="!isLoading && loadError" class="muted">{{ 'admin.detail.loadError' | translate }}</p>
+    </section>
+  </section>
+</ng-template>

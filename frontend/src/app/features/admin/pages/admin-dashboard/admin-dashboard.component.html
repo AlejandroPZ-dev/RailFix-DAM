@@ -1,0 +1,16 @@
+<section class="page">
+  <header class="page-header">
+    <h2>{{ 'admin.dashboard.title' | translate }}</h2>
+    <p>{{ 'admin.dashboard.welcome' | translate:{ name: userName } }}</p>
+  </header>
+
+  <a class="action-card" routerLink="/admin/incidencias">
+    <h3>{{ 'admin.dashboard.manageIncidents' | translate }}</h3>
+    <p>{{ 'admin.dashboard.manageIncidentsHelp' | translate }}</p>
+  </a>
+
+  <a class="action-card" routerLink="/admin/reportes">
+    <h3>{{ 'admin.dashboard.reviewReports' | translate }}</h3>
+    <p>{{ 'admin.dashboard.reviewReportsHelp' | translate }}</p>
+  </a>
+</section>

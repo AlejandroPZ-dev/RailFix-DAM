@@ -1,0 +1,101 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(180deg, #eef2f6 0%, #dde7f2 100%);
+}
+
+.login-language {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.login-language label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.login-language select {
+  min-width: 160px;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  background: #ffffff;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.card header {
+  margin-bottom: 1.25rem;
+}
+
+.card h2,
+.card p {
+  margin: 0;
+}
+
+.card p {
+  margin-top: 0.35rem;
+  color: var(--color-text-muted);
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+input {
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+button {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-primary);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    justify-content: flex-start;
+    padding-top: 2rem;
+  }
+
+  .login-language {
+    justify-content: stretch;
+  }
+
+  .login-language select {
+    width: 100%;
+  }
+}

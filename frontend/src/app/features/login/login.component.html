@@ -1,0 +1,35 @@
+<section class="login-page">
+  <div class="login-language">
+    <label>
+      <span>{{ 'layout.language' | translate }}</span>
+      <select [ngModel]="currentLanguage" (ngModelChange)="setLanguage($event)">
+        <option *ngFor="let language of languages" [value]="language">
+          {{ ('languages.' + language) | translate }}
+        </option>
+      </select>
+    </label>
+  </div>
+
+  <section class="card">
+    <header>
+      <h2>{{ 'login.title' | translate }}</h2>
+      <p>{{ 'login.subtitle' | translate }}</p>
+    </header>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()">
+      <label>
+        <span>{{ 'login.username' | translate }}</span>
+        <input type="text" formControlName="username">
+      </label>
+
+      <label>
+        <span>{{ 'login.password' | translate }}</span>
+        <input type="password" formControlName="password">
+      </label>
+
+      <button type="submit" [disabled]="isSubmitting">
+        {{ 'login.submit' | translate }}
+      </button>
+    </form>
+  </section>
+</section>

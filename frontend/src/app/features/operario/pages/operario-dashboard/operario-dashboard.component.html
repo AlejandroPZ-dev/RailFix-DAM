@@ -1,0 +1,19 @@
+<section class="page">
+  <header class="page-header">
+    <h2>{{ 'operario.dashboard.title' | translate }}</h2>
+    <p>{{ 'operario.dashboard.welcome' | translate:{ name: userName } }}</p>
+  </header>
+
+  <div class="actions">
+    <a class="action-card" routerLink="/operario/incidencias">
+      <h3>{{ 'operario.dashboard.viewIncidents' | translate }}</h3>
+      <p>{{ 'operario.dashboard.viewIncidentsHelp' | translate }}</p>
+    </a>
+
+    <a class="action-card" routerLink="/operario/incidencias/nueva">
+      <h3>{{ 'operario.dashboard.createIncident' | translate }}</h3>
+      <p>{{ 'operario.dashboard.createIncidentHelp' | translate }}</p>
+    </a>
+  </div>
+</section>
+

@@ -1,0 +1,126 @@
+<section class="page">
+  <header class="page-header">
+    <h2>{{ 'admin.reports.title' | translate }}</h2>
+    <p>{{ 'admin.reports.subtitle' | translate }}</p>
+  </header>
+
+  <section class="filters" [formGroup]="filtersForm">
+    <h3>{{ 'admin.reports.filters.title' | translate }}</h3>
+
+    <label>
+      <span>{{ 'admin.reports.filters.idIncidencia' | translate }}</span>
+      <input type="number" formControlName="idIncidencia">
+    </label>
+
+    <label>
+      <span>{{ 'admin.reports.filters.idTecnico' | translate }}</span>
+      <select formControlName="idTecnico">
+        <option value="">{{ 'admin.reports.filters.allTechnicians' | translate }}</option>
+        <option *ngFor="let tecnico of tecnicos" [value]="tecnico.idUsuario">
+          {{ tecnico.nombre }} {{ tecnico.apellidos }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>{{ 'admin.reports.filters.estadoIncidencia' | translate }}</span>
+      <select formControlName="estadoIncidencia">
+        <option value="">{{ 'admin.reports.filters.allStates' | translate }}</option>
+        <option *ngFor="let estado of estadosIncidencia" [value]="estado">
+          {{ ('incidenciaEstado.' + estado) | translate }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>{{ 'admin.reports.filters.fechaDesde' | translate }}</span>
+      <input type="date" formControlName="fechaDesde">
+    </label>
+
+    <label>
+      <span>{{ 'admin.reports.filters.fechaHasta' | translate }}</span>
+      <input type="date" formControlName="fechaHasta">
+    </label>
+
+    <label>
+      <span>{{ 'admin.reports.filters.incidenciaResuelta' | translate }}</span>
+      <select formControlName="incidenciaResuelta">
+        <option value="">{{ 'admin.reports.filters.allResolved' | translate }}</option>
+        <option value="true">{{ 'common.yes' | translate }}</option>
+        <option value="false">{{ 'common.no' | translate }}</option>
+      </select>
+    </label>
+
+    <div class="filter-actions">
+      <button type="button" (click)="search()">{{ 'admin.reports.filters.search' | translate }}</button>
+      <button type="button" class="secondary-button" (click)="clear()">
+        {{ 'admin.reports.filters.clear' | translate }}
+      </button>
+    </div>
+  </section>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ 'admin.reports.columns.idReporte' | translate }}</th>
+          <th>{{ 'admin.reports.columns.idIncidencia' | translate }}</th>
+          <th>{{ 'admin.reports.columns.tituloIncidencia' | translate }}</th>
+          <th>{{ 'admin.reports.columns.tecnico' | translate }}</th>
+          <th>{{ 'admin.reports.columns.fechaReporte' | translate }}</th>
+          <th>{{ 'admin.reports.columns.descripcionReporte' | translate }}</th>
+          <th>{{ 'admin.reports.columns.urgenciaSugerida' | translate }}</th>
+          <th>{{ 'admin.reports.columns.urgenciaActualIncidencia' | translate }}</th>
+          <th>{{ 'admin.reports.columns.estadoIncidencia' | translate }}</th>
+          <th>{{ 'admin.reports.columns.requiereMasTecnicos' | translate }}</th>
+          <th>{{ 'admin.reports.columns.incidenciaResuelta' | translate }}</th>
+          <th>{{ 'admin.reports.columns.acciones' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="isLoading">
+          <td colspan="12" class="empty-row">{{ 'admin.reports.loading' | translate }}</td>
+        </tr>
+        <tr *ngFor="let reporte of reportes">
+          <td>{{ reporte.idReporte }}</td>
+          <td>{{ reporte.incidenciaId }}</td>
+          <td>{{ reporte.tituloIncidencia }}</td>
+          <td>{{ reporte.tecnicoNombre }} {{ reporte.tecnicoApellidos }}</td>
+          <td>{{ reporte.fechaReporte | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td class="report-description">{{ reporte.descripcionReporte }}</td>
+          <td>
+            <span *ngIf="reporte.urgenciaSugerida; else noSuggestedUrgency">
+              {{ ('incidenciaUrgencia.' + reporte.urgenciaSugerida) | translate }}
+            </span>
+            <ng-template #noSuggestedUrgency>
+              {{ 'admin.reports.noSuggestedUrgency' | translate }}
+            </ng-template>
+          </td>
+          <td>{{ ('incidenciaUrgencia.' + reporte.urgenciaActualIncidencia) | translate }}</td>
+          <td>{{ ('incidenciaEstado.' + reporte.estadoIncidencia) | translate }}</td>
+          <td>{{ reporte.requiereMasTecnicos ? ('common.yes' | translate) : ('common.no' | translate) }}</td>
+          <td>{{ reporte.incidenciaResuelta ? ('common.yes' | translate) : ('common.no' | translate) }}</td>
+          <td>
+            <div class="actions">
+              <button type="button" (click)="goToIncidencia(reporte.incidenciaId)">
+                {{ 'admin.reports.viewIncident' | translate }}
+              </button>
+              <button type="button" [disabled]="!canApplyUrgencia(reporte)" (click)="applySuggestedUrgencia(reporte)">
+                {{ 'admin.reports.applySuggestedUrgency' | translate }}
+              </button>
+              <button type="button" [disabled]="!canMarkEnRevision(reporte)" (click)="markEnRevision(reporte)">
+                {{ 'admin.reports.markInReview' | translate }}
+              </button>
+              <button type="button" [disabled]="!canCloseIncidencia(reporte)" (click)="closeIncidencia(reporte)">
+                {{ 'admin.reports.closeIncident' | translate }}
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!isLoading && reportes.length === 0">
+          <td colspan="12" class="empty-row">{{ 'admin.reports.emptyFiltered' | translate }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

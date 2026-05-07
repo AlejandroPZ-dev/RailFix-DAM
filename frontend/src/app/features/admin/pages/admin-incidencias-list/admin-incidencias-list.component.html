@@ -1,0 +1,83 @@
+<section class="page">
+  <header class="page-header">
+    <h2>{{ 'admin.list.title' | translate }}</h2>
+    <p>{{ 'admin.list.subtitle' | translate }}</p>
+  </header>
+
+  <section class="filters">
+    <label>
+      <span>{{ 'admin.list.filters.estado' | translate }}</span>
+      <select [(ngModel)]="filters.estado">
+        <option value="">{{ 'admin.list.filters.all' | translate }}</option>
+        <option *ngFor="let estado of estados" [value]="estado">
+          {{ ('incidenciaEstado.' + estado) | translate }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>{{ 'admin.list.filters.urgencia' | translate }}</span>
+      <select [(ngModel)]="filters.urgencia">
+        <option value="">{{ 'admin.list.filters.all' | translate }}</option>
+        <option *ngFor="let urgencia of urgencias" [value]="urgencia">
+          {{ ('incidenciaUrgencia.' + urgencia) | translate }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>{{ 'admin.list.filters.linea' | translate }}</span>
+      <select [(ngModel)]="filters.lineaId">
+        <option value="">{{ 'admin.list.filters.all' | translate }}</option>
+        <option *ngFor="let linea of lineas" [value]="linea.id">
+          {{ linea.nombre }}
+        </option>
+      </select>
+    </label>
+  </section>
+
+  <div class="table-actions">
+    <button type="button" [disabled]="!selectedIncidencia" (click)="goToSelectedDetail()">
+      {{ 'admin.list.viewDetail' | translate }}
+    </button>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ 'admin.list.columns.id' | translate }}</th>
+          <th>{{ 'admin.list.columns.titulo' | translate }}</th>
+          <th>{{ 'admin.list.columns.linea' | translate }}</th>
+          <th>{{ 'admin.list.columns.via' | translate }}</th>
+          <th>{{ 'admin.list.columns.puntoKilometrico' | translate }}</th>
+          <th>{{ 'admin.list.columns.urgencia' | translate }}</th>
+          <th>{{ 'admin.list.columns.estado' | translate }}</th>
+          <th>{{ 'admin.list.columns.fechaCreacion' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="isLoading">
+          <td colspan="8" class="empty-row">{{ 'admin.list.loading' | translate }}</td>
+        </tr>
+        <tr
+          *ngFor="let incidencia of filteredIncidencias"
+          class="data-row"
+          [class.selected-row]="selectedIncidencia?.id === incidencia.id"
+          (click)="selectIncidencia(incidencia)">
+          <td>{{ incidencia.id }}</td>
+          <td>{{ incidencia.titulo }}</td>
+          <td>{{ incidencia.lineaNombre }}</td>
+          <td>{{ incidencia.viaNombre }}</td>
+          <td>{{ incidencia.puntoKilometrico }}</td>
+          <td>{{ ('incidenciaUrgencia.' + incidencia.urgencia) | translate }}</td>
+          <td>{{ ('incidenciaEstado.' + incidencia.estado) | translate }}</td>
+          <td>{{ incidencia.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+        <tr *ngIf="!isLoading && filteredIncidencias.length === 0">
+          <td colspan="8" class="empty-row">{{ 'admin.list.empty' | translate }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

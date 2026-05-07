@@ -1,0 +1,229 @@
+-- DROP SCHEMA public;
+
+CREATE SCHEMA public AUTHORIZATION pg_database_owner;
+
+-- DROP SEQUENCE public.asignaciones_incidencia_id_asignacion_seq;
+
+CREATE SEQUENCE public.asignaciones_incidencia_id_asignacion_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+-- DROP SEQUENCE public.historial_incidencia_id_historial_seq;
+
+CREATE SEQUENCE public.historial_incidencia_id_historial_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+-- DROP SEQUENCE public.incidencias_id_incidencia_seq;
+
+CREATE SEQUENCE public.incidencias_id_incidencia_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+-- DROP SEQUENCE public.lineas_id_linea_seq;
+
+CREATE SEQUENCE public.lineas_id_linea_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+-- DROP SEQUENCE public.reportes_tecnico_id_reporte_seq;
+
+CREATE SEQUENCE public.reportes_tecnico_id_reporte_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+-- DROP SEQUENCE public.usuarios_id_usuario_seq;
+
+CREATE SEQUENCE public.usuarios_id_usuario_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+-- DROP SEQUENCE public.vias_id_via_seq;
+
+CREATE SEQUENCE public.vias_id_via_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;-- public.lineas definition
+
+-- Drop table
+
+-- DROP TABLE public.lineas;
+
+CREATE TABLE public.lineas (
+	id_linea bigserial NOT NULL,
+	codigo_linea varchar(20) NOT NULL,
+	nombre varchar(150) NOT NULL,
+	origen varchar(100) NOT NULL,
+	destino varchar(100) NOT NULL,
+	pk_inicial numeric(8, 3) NOT NULL,
+	pk_final numeric(8, 3) NOT NULL,
+	CONSTRAINT chk_lineas_pk CHECK ((pk_final > pk_inicial)),
+	CONSTRAINT lineas_codigo_linea_key UNIQUE (codigo_linea),
+	CONSTRAINT lineas_nombre_key UNIQUE (nombre),
+	CONSTRAINT lineas_pkey PRIMARY KEY (id_linea)
+);
+
+
+-- public.usuarios definition
+
+-- Drop table
+
+-- DROP TABLE public.usuarios;
+
+CREATE TABLE public.usuarios (
+	id_usuario bigserial NOT NULL,
+	nombre varchar(100) NOT NULL,
+	apellidos varchar(150) NOT NULL,
+	username varchar(50) NOT NULL,
+	password_hash varchar(255) NOT NULL,
+	rol varchar(20) NOT NULL,
+	activo bool DEFAULT true NOT NULL,
+	fecha_creacion timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	CONSTRAINT usuarios_pkey PRIMARY KEY (id_usuario),
+	CONSTRAINT usuarios_rol_check CHECK (((rol)::text = ANY ((ARRAY['OPERARIO'::character varying, 'ADMINISTRADOR'::character varying, 'TECNICO'::character varying])::text[]))),
+	CONSTRAINT usuarios_username_key UNIQUE (username)
+);
+
+
+-- public.vias definition
+
+-- Drop table
+
+-- DROP TABLE public.vias;
+
+CREATE TABLE public.vias (
+	id_via bigserial NOT NULL,
+	id_linea int8 NOT NULL,
+	codigo_via varchar(20) NOT NULL,
+	nombre varchar(150) NOT NULL,
+	sentido varchar(20) NOT NULL,
+	activa bool DEFAULT true NOT NULL,
+	CONSTRAINT uk_vias_linea_codigo UNIQUE (id_linea, codigo_via),
+	CONSTRAINT vias_pkey PRIMARY KEY (id_via),
+	CONSTRAINT vias_sentido_check CHECK (((sentido)::text = ANY ((ARRAY['CRECIENTE'::character varying, 'DECRECIENTE'::character varying, 'AMBOS'::character varying, 'NO_APLICA'::character varying])::text[]))),
+	CONSTRAINT fk_vias_lineas FOREIGN KEY (id_linea) REFERENCES public.lineas(id_linea)
+);
+
+
+-- public.incidencias definition
+
+-- Drop table
+
+-- DROP TABLE public.incidencias;
+
+CREATE TABLE public.incidencias (
+	id_incidencia bigserial NOT NULL,
+	id_linea int8 NOT NULL,
+	id_via int8 NOT NULL,
+	id_operario_creador int8 NOT NULL,
+	titulo varchar(150) NOT NULL,
+	descripcion text NOT NULL,
+	punto_kilometrico numeric(8, 3) NOT NULL,
+	urgencia varchar(20) NOT NULL,
+	estado varchar(20) DEFAULT 'ABIERTA'::character varying NOT NULL,
+	fecha_creacion timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	fecha_actualizacion timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	fecha_cierre timestamp NULL,
+	latitud numeric(9, 6) NULL,
+	longitud numeric(9, 6) NULL,
+	precision_gps_metros numeric(8, 2) NULL,
+	CONSTRAINT incidencias_estado_check CHECK (((estado)::text = ANY ((ARRAY['ABIERTA'::character varying, 'ASIGNADA'::character varying, 'EN_REVISION'::character varying, 'RESUELTA'::character varying, 'CERRADA'::character varying])::text[]))),
+	CONSTRAINT incidencias_pkey PRIMARY KEY (id_incidencia),
+	CONSTRAINT incidencias_urgencia_check CHECK (((urgencia)::text = ANY ((ARRAY['BAJA'::character varying, 'MEDIA'::character varying, 'ALTA'::character varying, 'CRITICA'::character varying])::text[]))),
+	CONSTRAINT fk_incidencias_lineas FOREIGN KEY (id_linea) REFERENCES public.lineas(id_linea),
+	CONSTRAINT fk_incidencias_operario FOREIGN KEY (id_operario_creador) REFERENCES public.usuarios(id_usuario),
+	CONSTRAINT fk_incidencias_vias FOREIGN KEY (id_via) REFERENCES public.vias(id_via)
+);
+CREATE INDEX idx_incidencias_estado ON public.incidencias USING btree (estado);
+CREATE INDEX idx_incidencias_fecha_creacion ON public.incidencias USING btree (fecha_creacion);
+CREATE INDEX idx_incidencias_linea_via ON public.incidencias USING btree (id_linea, id_via);
+CREATE INDEX idx_incidencias_urgencia ON public.incidencias USING btree (urgencia);
+
+
+-- public.reportes_tecnico definition
+
+-- Drop table
+
+-- DROP TABLE public.reportes_tecnico;
+
+CREATE TABLE public.reportes_tecnico (
+	id_reporte bigserial NOT NULL,
+	id_incidencia int8 NOT NULL,
+	id_tecnico int8 NOT NULL,
+	descripcion_reporte text NOT NULL,
+	urgencia_sugerida varchar(20) NULL,
+	requiere_mas_tecnicos bool DEFAULT false NOT NULL,
+	incidencia_resuelta bool DEFAULT false NOT NULL,
+	fecha_reporte timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	CONSTRAINT reportes_tecnico_pkey PRIMARY KEY (id_reporte),
+	CONSTRAINT reportes_tecnico_urgencia_sugerida_check CHECK (((urgencia_sugerida)::text = ANY ((ARRAY['BAJA'::character varying, 'MEDIA'::character varying, 'ALTA'::character varying, 'CRITICA'::character varying])::text[]))),
+	CONSTRAINT fk_reportes_incidencia FOREIGN KEY (id_incidencia) REFERENCES public.incidencias(id_incidencia),
+	CONSTRAINT fk_reportes_tecnico FOREIGN KEY (id_tecnico) REFERENCES public.usuarios(id_usuario)
+);
+CREATE INDEX idx_reportes_incidencia ON public.reportes_tecnico USING btree (id_incidencia);
+
+
+-- public.asignaciones_incidencia definition
+
+-- Drop table
+
+-- DROP TABLE public.asignaciones_incidencia;
+
+CREATE TABLE public.asignaciones_incidencia (
+	id_asignacion bigserial NOT NULL,
+	id_incidencia int8 NOT NULL,
+	id_tecnico int8 NOT NULL,
+	id_administrador int8 NOT NULL,
+	fecha_asignacion timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	estado_asignacion varchar(20) DEFAULT 'ASIGNADA'::character varying NOT NULL,
+	CONSTRAINT asignaciones_incidencia_estado_asignacion_check CHECK (((estado_asignacion)::text = ANY ((ARRAY['ASIGNADA'::character varying, 'EN_CURSO'::character varying, 'FINALIZADA'::character varying])::text[]))),
+	CONSTRAINT asignaciones_incidencia_pkey PRIMARY KEY (id_asignacion),
+	CONSTRAINT uk_asignacion_incidencia_tecnico UNIQUE (id_incidencia, id_tecnico),
+	CONSTRAINT fk_asignaciones_administrador FOREIGN KEY (id_administrador) REFERENCES public.usuarios(id_usuario),
+	CONSTRAINT fk_asignaciones_incidencia FOREIGN KEY (id_incidencia) REFERENCES public.incidencias(id_incidencia),
+	CONSTRAINT fk_asignaciones_tecnico FOREIGN KEY (id_tecnico) REFERENCES public.usuarios(id_usuario)
+);
+CREATE INDEX idx_asignaciones_tecnico ON public.asignaciones_incidencia USING btree (id_tecnico);
+
+
+-- public.historial_incidencia definition
+
+-- Drop table
+
+-- DROP TABLE public.historial_incidencia;
+
+CREATE TABLE public.historial_incidencia (
+	id_historial bigserial NOT NULL,
+	id_incidencia int8 NOT NULL,
+	id_usuario int8 NOT NULL,
+	accion varchar(50) NOT NULL,
+	estado_anterior varchar(20) NULL,
+	estado_nuevo varchar(20) NULL,
+	comentario text NULL,
+	fecha_accion timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	CONSTRAINT historial_incidencia_pkey PRIMARY KEY (id_historial),
+	CONSTRAINT fk_historial_incidencia FOREIGN KEY (id_incidencia) REFERENCES public.incidencias(id_incidencia),
+	CONSTRAINT fk_historial_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuarios(id_usuario)
+);
+CREATE INDEX idx_historial_incidencia ON public.historial_incidencia USING btree (id_incidencia);

@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "RailFix DAM",
+    "subtitle": "Gestión básica de incidencias ferroviarias"
+  },
+  "languages": {
+    "es": "Español",
+    "en": "Inglés"
+  },
+  "roles": {
+    "OPERARIO": "Operario",
+    "ADMINISTRADOR": "Administrador",
+    "TECNICO": "Técnico"
+  },
+  "layout": {
+    "language": "Idioma",
+    "role": "Rol",
+    "navigation": "Navegación"
+  },
+  "nav": {
+    "login": "Acceso",
+    "incidencias": "Incidencias"
+  },
+  "login": {
+    "title": "Inicio de sesión",
+    "subtitle": "Estructura inicial del acceso de usuarios",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "submit": "Entrar"
+  },
+  "incidencias": {
+    "title": "Incidencias",
+    "subtitle": "Vista inicial para consultar incidencias",
+    "placeholder": "Aquí se añadirá el listado y filtrado de incidencias en siguientes pasos."
+  }
+}
+

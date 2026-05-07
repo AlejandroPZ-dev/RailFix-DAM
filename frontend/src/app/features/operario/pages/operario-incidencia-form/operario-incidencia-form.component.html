@@ -1,0 +1,62 @@
+<section class="page">
+  <header class="page-header">
+    <h2>{{ 'operario.form.title' | translate }}</h2>
+    <p>{{ 'operario.form.subtitle' | translate }}</p>
+  </header>
+
+  <form class="form-card" [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      <span>{{ 'operario.form.fields.linea' | translate }}</span>
+      <select formControlName="lineaId">
+        <option [ngValue]="0">{{ 'operario.form.selectPlaceholder' | translate }}</option>
+        <option *ngFor="let linea of lineas" [ngValue]="linea.id">
+          {{ linea.nombre }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>{{ 'operario.form.fields.via' | translate }}</span>
+      <select formControlName="viaId">
+        <option [ngValue]="0">{{ 'operario.form.selectPlaceholder' | translate }}</option>
+        <option *ngFor="let via of vias" [ngValue]="via.id">
+          {{ via.nombre }}
+        </option>
+      </select>
+    </label>
+
+    <label class="full-width">
+      <span>{{ 'operario.form.fields.puntoKilometrico' | translate }}</span>
+      <input type="number" step="0.01" formControlName="puntoKilometrico">
+      <small *ngIf="selectedLinea">
+        {{ 'operario.form.pkRange' | translate:{ min: selectedLinea.pkInicial, max: selectedLinea.pkFinal } }}
+      </small>
+    </label>
+
+    <label class="full-width">
+      <span>{{ 'operario.form.fields.titulo' | translate }}</span>
+      <input type="text" formControlName="titulo">
+    </label>
+
+    <label class="full-width">
+      <span>{{ 'operario.form.fields.descripcion' | translate }}</span>
+      <textarea rows="5" formControlName="descripcion"></textarea>
+    </label>
+
+    <label>
+      <span>{{ 'operario.form.fields.urgencia' | translate }}</span>
+      <select formControlName="urgencia">
+        <option [ngValue]="''">{{ 'operario.form.selectPlaceholder' | translate }}</option>
+        <option *ngFor="let urgencia of urgencias" [ngValue]="urgencia">
+          {{ ('incidenciaUrgencia.' + urgencia) | translate }}
+        </option>
+      </select>
+    </label>
+
+    <div class="actions full-width">
+      <button type="submit" [disabled]="isSubmitting">
+        {{ 'operario.form.submit' | translate }}
+      </button>
+    </div>
+  </form>
+</section>

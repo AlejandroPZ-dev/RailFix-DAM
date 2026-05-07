@@ -1,0 +1,85 @@
+<section class="page">
+  <header class="page-header">
+    <h2>{{ 'tecnico.list.title' | translate }}</h2>
+    <p>{{ 'tecnico.list.subtitle' | translate }}</p>
+  </header>
+
+  <section class="filters">
+    <label>
+      <span>{{ 'tecnico.list.filters.estado' | translate }}</span>
+      <select [(ngModel)]="filters.estado">
+        <option value="">{{ 'tecnico.list.filters.all' | translate }}</option>
+        <option *ngFor="let estado of estados" [value]="estado">
+          {{ ('incidenciaEstado.' + estado) | translate }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>{{ 'tecnico.list.filters.urgencia' | translate }}</span>
+      <select [(ngModel)]="filters.urgencia">
+        <option value="">{{ 'tecnico.list.filters.all' | translate }}</option>
+        <option *ngFor="let urgencia of urgencias" [value]="urgencia">
+          {{ ('incidenciaUrgencia.' + urgencia) | translate }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      <span>{{ 'tecnico.list.filters.estadoAsignacion' | translate }}</span>
+      <select [(ngModel)]="filters.estadoAsignacion">
+        <option value="">{{ 'tecnico.list.filters.all' | translate }}</option>
+        <option *ngFor="let estadoAsignacion of estadosAsignacion" [value]="estadoAsignacion">
+          {{ ('estadoAsignacion.' + estadoAsignacion) | translate }}
+        </option>
+      </select>
+    </label>
+  </section>
+
+  <div class="table-actions">
+    <button type="button" [disabled]="!selectedIncidencia" (click)="goToSelectedDetail()">
+      {{ 'tecnico.list.viewDetail' | translate }}
+    </button>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ 'tecnico.list.columns.id' | translate }}</th>
+          <th>{{ 'tecnico.list.columns.titulo' | translate }}</th>
+          <th>{{ 'tecnico.list.columns.linea' | translate }}</th>
+          <th>{{ 'tecnico.list.columns.via' | translate }}</th>
+          <th>{{ 'tecnico.list.columns.puntoKilometrico' | translate }}</th>
+          <th>{{ 'tecnico.list.columns.urgencia' | translate }}</th>
+          <th>{{ 'tecnico.list.columns.estado' | translate }}</th>
+          <th>{{ 'tecnico.list.columns.estadoAsignacion' | translate }}</th>
+          <th>{{ 'tecnico.list.columns.fechaAsignacion' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="isLoading">
+          <td colspan="9" class="empty-row">{{ 'tecnico.list.loading' | translate }}</td>
+        </tr>
+        <tr
+          *ngFor="let incidencia of filteredIncidencias"
+          class="data-row"
+          [class.selected-row]="selectedIncidencia?.id === incidencia.id"
+          (click)="selectIncidencia(incidencia)">
+          <td>{{ incidencia.id }}</td>
+          <td>{{ incidencia.titulo }}</td>
+          <td>{{ incidencia.lineaNombre }}</td>
+          <td>{{ incidencia.viaNombre }}</td>
+          <td>{{ incidencia.puntoKilometrico }}</td>
+          <td>{{ ('incidenciaUrgencia.' + incidencia.urgencia) | translate }}</td>
+          <td>{{ ('incidenciaEstado.' + incidencia.estado) | translate }}</td>
+          <td>{{ ('estadoAsignacion.' + incidencia.estadoAsignacion) | translate }}</td>
+          <td>{{ incidencia.fechaAsignacion | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+        <tr *ngIf="!isLoading && filteredIncidencias.length === 0">
+          <td colspan="9" class="empty-row">{{ 'tecnico.list.empty' | translate }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

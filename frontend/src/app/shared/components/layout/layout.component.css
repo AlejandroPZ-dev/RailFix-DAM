@@ -1,0 +1,131 @@
+.shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.topbar h1,
+.topbar p {
+  margin: 0;
+}
+
+.topbar p {
+  margin-top: 0.35rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.toolbar {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.toolbar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.role-display {
+  min-width: 160px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.logout-button {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: calc(100vh - 108px);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+}
+
+.sidebar h2 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.sidebar a {
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.5rem;
+  color: var(--color-text-muted);
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+  background: var(--color-surface-muted);
+  color: var(--color-primary-dark);
+}
+
+.sidebar a.hidden {
+  display: none;
+}
+
+.main {
+  padding: 1.5rem;
+}
+
+.sidebar .logout-button {
+  margin-top: 1.5rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.sidebar .logout-button:hover {
+  background: #e6ebf1;
+}
+
+@media (max-width: 768px) {
+  .topbar,
+  .content {
+    display: block;
+  }
+
+  .toolbar {
+    margin-top: 1rem;
+    flex-direction: column;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+}

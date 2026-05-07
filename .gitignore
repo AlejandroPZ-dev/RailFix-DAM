@@ -1,0 +1,66 @@
+# Angular / Node
+node_modules/
+dist/
+.angular/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Spring Boot / Java / Maven / Gradle
+target/
+build/
+.gradle/
+backend/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Environment and secrets
+.env
+*.env
+!.env.example
+!docker/.env.example
+application-local.properties
+application-local.yml
+application-dev.properties
+application-dev.yml
+application-secret.properties
+application-secret.yml
+
+# IDE / editor
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Uploads / runtime files
+uploads/
+backend/uploads/
+
+# Database / runtime volumes
+postgres-data/
+pgdata/
+data/
+db-data/
+
+# Docker / process temp
+*.pid
+
+# Local tooling / caches
+.m2/
+tools/

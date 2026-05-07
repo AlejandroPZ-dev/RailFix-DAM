@@ -1,0 +1,17 @@
+<div *ngIf="toast$ | async as toast" class="toast-wrapper">
+  <div class="toast" [class.error]="toast.type === 'error'" [class.success]="toast.type === 'success'" [class.info]="toast.type === 'info'" role="alert" aria-live="polite">
+    <div class="toast-content">
+      <strong *ngIf="toast.titleKey">{{ toast.titleKey | translate }}</strong>
+      <p>{{ toast.messageKey | translate }}</p>
+    </div>
+
+    <button
+      type="button"
+      class="toast-close"
+      (click)="close()"
+      [attr.aria-label]="'toast.close' | translate"
+    >
+      x
+    </button>
+  </div>
+</div>
