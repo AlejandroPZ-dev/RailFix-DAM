@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
+import { API_BASE_URL } from '../config/api.config';
 import { Asignacion } from '../models/asignacion.model';
 import { TecnicoIncidenciaDetail } from '../models/tecnico-incidencia-detail.model';
 import { TecnicoIncidencia } from '../models/tecnico-incidencia.model';
@@ -16,7 +17,7 @@ type CreateAsignacionPayload = {
   providedIn: 'root'
 })
 export class AsignacionService {
-  private readonly apiUrl = 'http://localhost:8080/api';
+  private readonly apiUrl = API_BASE_URL;
 
   constructor(
     private readonly httpClient: HttpClient,

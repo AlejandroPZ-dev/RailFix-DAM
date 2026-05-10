@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, tap } from 'rxjs';
 
+import { API_BASE_URL } from '../config/api.config';
 import { Incidencia } from '../models/incidencia.model';
 
 type CreateIncidenciaPayload = {
@@ -38,7 +39,7 @@ type CerrarIncidenciaPayload = {
   providedIn: 'root'
 })
 export class IncidenciaService {
-  private readonly apiUrl = 'http://localhost:8080/api/incidencias';
+  private readonly apiUrl = `${API_BASE_URL}/incidencias`;
   private readonly incidenciasUpdatedSubject = new Subject<void>();
   readonly incidenciasUpdated$ = this.incidenciasUpdatedSubject.asObservable();
 

@@ -2,22 +2,22 @@ export const translations = {
   es: {
     app: {
       title: 'RailFix DAM',
-      subtitle: 'Gestion basica de incidencias ferroviarias'
+      subtitle: 'Gestión básica de incidencias ferroviarias'
     },
     languages: {
-      es: 'Espanol',
-      en: 'Ingles'
+      es: 'Español',
+      en: 'Inglés'
     },
     roles: {
       OPERARIO: 'Operario',
       ADMINISTRADOR: 'Administrador',
-      TECNICO: 'Tecnico'
+      TECNICO: 'Técnico'
     },
     layout: {
       language: 'Idioma',
       role: 'Rol',
-      navigation: 'Navegacion',
-      logout: 'Cerrar sesion'
+      navigation: 'Navegación',
+      logout: 'Cerrar sesión'
     },
     toast: {
       close: 'Cerrar aviso',
@@ -25,15 +25,23 @@ export const translations = {
         title: 'Aviso'
       },
       success: {
-        title: 'Operacion completada'
+        title: 'Operación completada'
       },
       info: {
-        title: 'Informacion'
+        title: 'Información'
       }
     },
     common: {
-      yes: 'Si',
-      no: 'No'
+      yes: 'Sí',
+      no: 'No',
+      requiredField: 'Falta rellenar este campo obligatorio.',
+      minimumCharacters: 'Debe tener al menos {{count}} caracteres.'
+    },
+    attachments: {
+      viewImage: 'Ver imagen',
+      originalName: 'Nombre original',
+      uploadDate: 'Fecha de subida',
+      size: 'Tamaño'
     },
     nav: {
       operarioDashboard: 'Panel operario',
@@ -41,19 +49,19 @@ export const translations = {
       operarioNuevaIncidencia: 'Registrar incidencia',
       adminDashboard: 'Panel administrador',
       adminIncidencias: 'Gestionar incidencias',
-      adminReportes: 'Revisar reportes tecnicos',
-      tecnicoDashboard: 'Panel tecnico',
+      adminReportes: 'Revisar reportes técnicos',
+      tecnicoDashboard: 'Panel técnico',
       tecnicoIncidencias: 'Mis incidencias'
     },
     login: {
-      title: 'Inicio de sesion',
+      title: 'Inicio de sesión',
       subtitle: 'Acceso al sistema RailFix DAM',
       username: 'Usuario',
-      password: 'Contrasena',
+      password: 'Contraseña',
       submit: 'Entrar',
       error: {
-        requiredFields: 'Debes completar usuario y contrasena.',
-        invalidCredentials: 'Usuario o contrasena incorrectos.',
+        requiredFields: 'Debes completar usuario y contraseña.',
+        invalidCredentials: 'Usuario o contraseña incorrectos.',
         serverUnavailable: 'No se ha podido conectar con el servidor.'
       }
     },
@@ -61,12 +69,12 @@ export const translations = {
       BAJA: 'Baja',
       MEDIA: 'Media',
       ALTA: 'Alta',
-      CRITICA: 'Critica'
+      CRITICA: 'Crítica'
     },
     incidenciaEstado: {
       ABIERTA: 'Abierta',
       ASIGNADA: 'Asignada',
-      EN_REVISION: 'En revision',
+      EN_REVISION: 'En revisión',
       RESUELTA: 'Resuelta',
       CERRADA: 'Cerrada'
     },
@@ -75,8 +83,8 @@ export const translations = {
       CAMBIO_ESTADO: 'Cambio de estado',
       ACTUALIZADA: 'Actualizada',
       CERRADA: 'Cerrada',
-      REPORTE_TECNICO: 'Reporte tecnico',
-      TECNICO_DESASIGNADO: 'Tecnico desasignado'
+      REPORTE_TECNICO: 'Reporte técnico',
+      TECNICO_DESASIGNADO: 'Técnico desasignado'
     },
     estadoAsignacion: {
       ASIGNADA: 'Asignada',
@@ -94,46 +102,58 @@ export const translations = {
       },
       list: {
         title: 'Incidencias registradas',
-        subtitle: 'Consulta las incidencias disponibles con filtros basicos.',
+        subtitle: 'Consulta las incidencias disponibles con filtros básicos.',
         loading: 'Cargando incidencias...',
         empty: 'No hay incidencias para los filtros seleccionados.',
         filters: {
           all: 'Todos',
           estado: 'Estado',
           urgencia: 'Urgencia',
-          linea: 'Linea'
+          linea: 'Línea'
         },
         columns: {
           id: 'Id',
-          titulo: 'Titulo',
-          linea: 'Linea',
-          via: 'Via',
-          puntoKilometrico: 'Punto kilometrico',
+          titulo: 'Título',
+          linea: 'Línea',
+          via: 'Vía',
+          puntoKilometrico: 'Punto kilométrico',
           urgencia: 'Urgencia',
           estado: 'Estado',
-          fechaCreacion: 'Fecha de creacion'
+          fechaCreacion: 'Fecha de creación'
         }
       },
       form: {
         title: 'Nueva incidencia',
         subtitle: 'Registra una nueva incidencia como operario.',
-        selectPlaceholder: 'Selecciona una opcion',
+        selectPlaceholder: 'Selecciona una opción',
         pkRange: 'Rango permitido: de {{min}} a {{max}}.',
         submit: 'Guardar incidencia',
         success: 'La incidencia se ha creado correctamente.',
         fields: {
-          linea: 'Linea',
-          via: 'Via',
-          puntoKilometrico: 'Punto kilometrico',
-          titulo: 'Titulo',
-          descripcion: 'Descripcion',
-          urgencia: 'Urgencia'
+          linea: 'Línea',
+          via: 'Vía',
+          puntoKilometrico: 'Punto kilométrico',
+          titulo: 'Título',
+          descripcion: 'Descripción',
+          urgencia: 'Urgencia',
+          adjuntos: 'Adjuntar fotos'
+        },
+        attachments: {
+          allowedTypes: 'Solo se permiten imágenes JPG, PNG o WEBP',
+          maxSize: 'Cada imagen debe pesar como máximo 5 MB',
+          maxFiles: 'Máximo 3 imágenes por incidencia',
+          uploadSuccessOne: 'Imagen subida correctamente',
+          uploadSuccessMany: 'Las imágenes se subieron correctamente',
+          uploadWarning: 'La incidencia se creó correctamente, pero no se pudieron subir algunas imágenes.'
         },
         errors: {
           invalidForm: 'Debes completar todos los campos obligatorios.',
-          invalidLine: 'La linea seleccionada no es valida.',
-          pkOutOfRange: 'El punto kilometrico no esta dentro del rango de la linea seleccionada.',
-          createFailed: 'No se ha podido crear la incidencia.'
+          invalidLine: 'La línea seleccionada no es válida.',
+          pkOutOfRange: 'El punto kilométrico no está dentro del rango de la línea seleccionada.',
+          createFailed: 'No se ha podido crear la incidencia.',
+          invalidImageType: 'Solo se permiten imágenes JPG, PNG o WEBP',
+          invalidImageSize: 'Cada imagen debe pesar como máximo 5 MB',
+          maxFiles: 'Máximo 3 imágenes por incidencia'
         }
       }
     },
@@ -142,12 +162,12 @@ export const translations = {
         title: 'Panel de administrador',
         welcome: 'Bienvenido, {{name}}.',
         manageIncidents: 'Gestionar incidencias',
-        manageIncidentsHelp: 'Consulta incidencias y asigna tecnicos.',
-        reviewReports: 'Revisar reportes tecnicos',
-        reviewReportsHelp: 'Consulta reportes enviados por los tecnicos y decide las acciones a aplicar.'
+        manageIncidentsHelp: 'Consulta incidencias y asigna técnicos.',
+        reviewReports: 'Revisar reportes técnicos',
+        reviewReportsHelp: 'Consulta reportes enviados por los técnicos y decide las acciones a aplicar.'
       },
       list: {
-        title: 'Gestion de incidencias',
+        title: 'Gestión de incidencias',
         subtitle: 'Consulta incidencias y accede al detalle.',
         loading: 'Cargando incidencias...',
         empty: 'No hay incidencias para los filtros seleccionados.',
@@ -156,17 +176,17 @@ export const translations = {
           all: 'Todos',
           estado: 'Estado',
           urgencia: 'Urgencia',
-          linea: 'Linea'
+          linea: 'Línea'
         },
         columns: {
           id: 'Id',
-          titulo: 'Titulo',
-          linea: 'Linea',
-          via: 'Via',
-          puntoKilometrico: 'Punto kilometrico',
+          titulo: 'Título',
+          linea: 'Línea',
+          via: 'Vía',
+          puntoKilometrico: 'Punto kilométrico',
           urgencia: 'Urgencia',
           estado: 'Estado',
-          fechaCreacion: 'Fecha de creacion',
+          fechaCreacion: 'Fecha de creación',
           acciones: 'Acciones'
         }
       },
@@ -174,63 +194,65 @@ export const translations = {
         title: 'Incidencia #{{id}}',
         loading: 'Cargando detalle de la incidencia...',
         loadError: 'No se ha podido cargar el detalle de la incidencia.',
-        assignedTechnicians: 'Tecnicos asignados',
-        noAssignments: 'No hay tecnicos asignados.',
+        assignedTechnicians: 'Técnicos asignados',
+        noAssignments: 'No hay técnicos asignados.',
         historyTitle: 'Historial de la incidencia',
-        noHistory: 'No hay movimientos registrados todavia.',
-        reportsTitle: 'Reportes tecnicos',
-        noReports: 'Todavia no hay reportes tecnicos para esta incidencia.',
+        noHistory: 'No hay movimientos registrados todavía.',
+        reportsTitle: 'Reportes técnicos',
+        noReports: 'Todavía no hay reportes técnicos para esta incidencia.',
+        attachmentsTitle: 'Fotos adjuntas',
+        noAttachments: 'No hay fotos adjuntas',
         reportUrgency: 'Urgencia sugerida',
         noSuggestedUrgency: 'Sin sugerencia',
-        updateDescriptionTitle: 'Actualizar descripcion',
-        updateDescriptionAction: 'Guardar descripcion',
+        updateDescriptionTitle: 'Actualizar descripción',
+        updateDescriptionAction: 'Guardar descripción',
         updateStatusTitle: 'Cambiar estado',
         updateStatusAction: 'Guardar estado',
-        assignLabel: 'Seleccionar tecnicos',
-        assignAction: 'Asignar tecnicos',
+        assignLabel: 'Seleccionar técnicos',
+        assignAction: 'Asignar técnicos',
         removeAction: 'Quitar',
-        assignSuccess: 'Los tecnicos se han asignado correctamente.',
-        assignError: 'No se ha podido asignar los tecnicos.',
-        removeSuccess: 'El tecnico se ha desasignado correctamente.',
-        removeError: 'No se ha podido desasignar el tecnico.',
-        descriptionSuccess: 'La descripcion se ha actualizado correctamente.',
-        descriptionError: 'No se ha podido actualizar la descripcion.',
+        assignSuccess: 'Los técnicos se han asignado correctamente.',
+        assignError: 'No se ha podido asignar los técnicos.',
+        removeSuccess: 'El técnico se ha desasignado correctamente.',
+        removeError: 'No se ha podido desasignar el técnico.',
+        descriptionSuccess: 'La descripción se ha actualizado correctamente.',
+        descriptionError: 'No se ha podido actualizar la descripción.',
         statusSuccess: 'El estado se ha actualizado correctamente.',
         statusError: 'No se ha podido actualizar el estado.',
         fields: {
           id: 'Id',
-          titulo: 'Titulo',
-          linea: 'Linea',
-          via: 'Via',
-          puntoKilometrico: 'Punto kilometrico',
+          titulo: 'Título',
+          linea: 'Línea',
+          via: 'Vía',
+          puntoKilometrico: 'Punto kilométrico',
           urgencia: 'Urgencia',
           estado: 'Estado',
           operarioCreador: 'Operario creador',
-          fechaCreacion: 'Fecha de creacion',
-          fechaActualizacion: 'Fecha de actualizacion',
+          fechaCreacion: 'Fecha de creación',
+          fechaActualizacion: 'Fecha de actualización',
           fechaCierre: 'Fecha de cierre',
-          descripcion: 'Descripcion'
+          descripcion: 'Descripción'
         }
       },
       reports: {
-        title: 'Reportes tecnicos',
-        subtitle: 'Revisa los reportes enviados por los tecnicos.',
-        loading: 'Cargando reportes tecnicos...',
-        empty: 'No hay reportes tecnicos.',
+        title: 'Reportes técnicos',
+        subtitle: 'Revisa los reportes enviados por los técnicos.',
+        loading: 'Cargando reportes técnicos...',
+        empty: 'No hay reportes técnicos.',
         emptyFiltered: 'No se encontraron reportes con los filtros indicados.',
-        loadError: 'No se han podido cargar los reportes tecnicos.',
+        loadError: 'No se han podido cargar los reportes técnicos.',
         noSuggestedUrgency: 'Sin sugerencia',
         viewIncident: 'Ver incidencia',
         applySuggestedUrgency: 'Aplicar urgencia sugerida',
-        markInReview: 'Marcar en revision',
+        markInReview: 'Marcar en revisión',
         closeIncident: 'Cerrar incidencia',
-        actionSuccess: 'Accion realizada correctamente.',
-        actionError: 'No se ha podido completar la accion.',
+        actionSuccess: 'Acción realizada correctamente.',
+        actionError: 'No se ha podido completar la acción.',
         filters: {
           title: 'Filtros',
           idIncidencia: 'ID incidencia',
-          idTecnico: 'Tecnico',
-          allTechnicians: 'Todos los tecnicos',
+          idTecnico: 'Técnico',
+          allTechnicians: 'Todos los técnicos',
           estadoIncidencia: 'Estado de la incidencia',
           allStates: 'Todos los estados',
           fechaDesde: 'Fecha desde',
@@ -244,13 +266,13 @@ export const translations = {
           idReporte: 'Id reporte',
           idIncidencia: 'Id incidencia',
           tituloIncidencia: 'Incidencia',
-          tecnico: 'Tecnico',
+          tecnico: 'Técnico',
           fechaReporte: 'Fecha del reporte',
-          descripcionReporte: 'Descripcion del reporte',
+          descripcionReporte: 'Descripción del reporte',
           urgenciaSugerida: 'Urgencia sugerida',
           urgenciaActualIncidencia: 'Urgencia actual',
           estadoIncidencia: 'Estado de la incidencia',
-          requiereMasTecnicos: 'Requiere mas tecnicos',
+          requiereMasTecnicos: 'Requiere más técnicos',
           incidenciaResuelta: 'Incidencia resuelta',
           acciones: 'Acciones'
         }
@@ -258,14 +280,14 @@ export const translations = {
     },
     tecnico: {
       dashboard: {
-        title: 'Panel tecnico',
+        title: 'Panel técnico',
         welcome: 'Bienvenido, {{name}}.',
         myIncidents: 'Mis incidencias asignadas',
         myIncidentsHelp: 'Consulta las incidencias que tienes asignadas.'
       },
       list: {
         title: 'Incidencias asignadas',
-        subtitle: 'Consulta las incidencias que tienes asignadas como tecnico.',
+        subtitle: 'Consulta las incidencias que tienes asignadas como técnico.',
         loading: 'Cargando incidencias asignadas...',
         empty: 'No tienes incidencias asignadas.',
         loadError: 'No se han podido cargar tus incidencias asignadas.',
@@ -274,18 +296,18 @@ export const translations = {
           all: 'Todos',
           estado: 'Estado',
           urgencia: 'Urgencia',
-          estadoAsignacion: 'Estado de asignacion'
+          estadoAsignacion: 'Estado de asignación'
         },
         columns: {
           id: 'Id',
-          titulo: 'Titulo',
-          linea: 'Linea',
-          via: 'Via',
-          puntoKilometrico: 'Punto kilometrico',
+          titulo: 'Título',
+          linea: 'Línea',
+          via: 'Vía',
+          puntoKilometrico: 'Punto kilométrico',
           urgencia: 'Urgencia',
           estado: 'Estado',
-          estadoAsignacion: 'Estado de asignacion',
-          fechaAsignacion: 'Fecha de asignacion',
+          estadoAsignacion: 'Estado de asignación',
+          fechaAsignacion: 'Fecha de asignación',
           acciones: 'Acciones'
         }
       },
@@ -294,39 +316,41 @@ export const translations = {
         loading: 'Cargando detalle de la incidencia...',
         loadError: 'No se ha podido cargar el detalle de la incidencia.',
         forbidden: 'No tiene permiso para ver esta incidencia',
-        reportsTitle: 'Mis reportes tecnicos',
-        noReports: 'Todavia no has enviado reportes para esta incidencia.',
+        reportsTitle: 'Mis reportes técnicos',
+        noReports: 'Todavía no has enviado reportes para esta incidencia.',
+        attachmentsTitle: 'Fotos adjuntas',
+        noAttachments: 'No hay fotos adjuntas',
         createReport: 'Crear reporte',
         reportUrgency: 'Urgencia sugerida',
-        reportRequiresMore: 'Requiere mas tecnicos',
+        reportRequiresMore: 'Requiere más técnicos',
         reportResolved: 'Incidencia resuelta',
         fields: {
           id: 'Id',
-          linea: 'Linea',
-          via: 'Via',
-          puntoKilometrico: 'Punto kilometrico',
+          linea: 'Línea',
+          via: 'Vía',
+          puntoKilometrico: 'Punto kilométrico',
           urgencia: 'Urgencia',
           estado: 'Estado',
-          estadoAsignacion: 'Estado de asignacion',
-          fechaAsignacion: 'Fecha de asignacion',
-          fechaCreacion: 'Fecha de creacion',
-          fechaActualizacion: 'Fecha de actualizacion',
+          estadoAsignacion: 'Estado de asignación',
+          fechaAsignacion: 'Fecha de asignación',
+          fechaCreacion: 'Fecha de creación',
+          fechaActualizacion: 'Fecha de actualización',
           fechaCierre: 'Fecha de cierre',
-          descripcion: 'Descripcion'
+          descripcion: 'Descripción'
         }
       },
       report: {
-        title: 'Nuevo reporte tecnico',
-        subtitle: 'Completa la informacion tecnica de la incidencia.',
+        title: 'Nuevo reporte técnico',
+        subtitle: 'Completa la información técnica de la incidencia.',
         submit: 'Enviar reporte',
-        success: 'El reporte tecnico se ha enviado correctamente.',
-        error: 'No se ha podido enviar el reporte tecnico.',
-        validationError: 'Debes completar una descripcion valida para el reporte.',
+        success: 'El reporte técnico se ha enviado correctamente.',
+        error: 'No se ha podido enviar el reporte técnico.',
+        validationError: 'Debes completar una descripción válida para el reporte.',
         emptyUrgency: 'Sin sugerencia',
         fields: {
-          descripcionReporte: 'Descripcion del reporte',
+          descripcionReporte: 'Descripción del reporte',
           urgenciaSugerida: 'Urgencia sugerida',
-          requiereMasTecnicos: 'Requiere mas tecnicos',
+          requiereMasTecnicos: 'Requiere más técnicos',
           incidenciaResuelta: 'Incidencia resuelta'
         }
       },
@@ -337,7 +361,7 @@ export const translations = {
     incidencias: {
       title: 'Incidencias',
       subtitle: 'Vista inicial para consultar incidencias',
-      placeholder: 'Aqui se anadira el listado y filtrado de incidencias en siguientes pasos.'
+      placeholder: 'Aquí se añadirá el listado y filtrado de incidencias en siguientes pasos.'
     }
   },
   en: {
@@ -374,7 +398,15 @@ export const translations = {
     },
     common: {
       yes: 'Yes',
-      no: 'No'
+      no: 'No',
+      requiredField: 'This field is required.',
+      minimumCharacters: 'It must contain at least {{count}} characters.'
+    },
+    attachments: {
+      viewImage: 'View image',
+      originalName: 'Original name',
+      uploadDate: 'Upload date',
+      size: 'Size'
     },
     nav: {
       operarioDashboard: 'Operator dashboard',
@@ -468,13 +500,25 @@ export const translations = {
           puntoKilometrico: 'Kilometric point',
           titulo: 'Title',
           descripcion: 'Description',
-          urgencia: 'Urgency'
+          urgencia: 'Urgency',
+          adjuntos: 'Attach photos'
+        },
+        attachments: {
+          allowedTypes: 'Only JPG, PNG or WEBP images are allowed',
+          maxSize: 'Each image must be at most 5 MB',
+          maxFiles: 'Maximum 3 images per incident',
+          uploadSuccessOne: 'Image uploaded successfully',
+          uploadSuccessMany: 'Images uploaded successfully',
+          uploadWarning: 'The incident was created successfully, but some images could not be uploaded.'
         },
         errors: {
           invalidForm: 'You must complete all required fields.',
           invalidLine: 'The selected line is not valid.',
           pkOutOfRange: 'The kilometric point is outside the selected line range.',
-          createFailed: 'The incident could not be created.'
+          createFailed: 'The incident could not be created.',
+          invalidImageType: 'Only JPG, PNG or WEBP images are allowed',
+          invalidImageSize: 'Each image must be at most 5 MB',
+          maxFiles: 'Maximum 3 images per incident'
         }
       }
     },
@@ -521,6 +565,8 @@ export const translations = {
         noHistory: 'There are no recorded changes yet.',
         reportsTitle: 'Technical reports',
         noReports: 'There are no technical reports for this incident yet.',
+        attachmentsTitle: 'Attached images',
+        noAttachments: 'There are no attached images',
         reportUrgency: 'Suggested urgency',
         noSuggestedUrgency: 'No suggestion',
         updateDescriptionTitle: 'Update description',
@@ -637,6 +683,8 @@ export const translations = {
         forbidden: 'You do not have permission to view this incident',
         reportsTitle: 'My technical reports',
         noReports: 'You have not sent reports for this incident yet.',
+        attachmentsTitle: 'Attached images',
+        noAttachments: 'There are no attached images',
         createReport: 'Create report',
         reportUrgency: 'Suggested urgency',
         reportRequiresMore: 'Requires more technicians',

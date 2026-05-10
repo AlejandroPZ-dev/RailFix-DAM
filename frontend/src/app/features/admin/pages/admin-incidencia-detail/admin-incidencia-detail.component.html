@@ -128,6 +128,31 @@
       {{ 'admin.detail.noReports' | translate }}
     </p>
   </section>
+
+  <section class="detail-card">
+    <h3>{{ 'admin.detail.attachmentsTitle' | translate }}</h3>
+
+    <div *ngIf="adjuntos.length === 0" class="muted">
+      {{ 'admin.detail.noAttachments' | translate }}
+    </div>
+
+    <div *ngIf="adjuntos.length > 0" class="attachments-grid">
+      <article *ngFor="let adjunto of adjuntos" class="attachment-card">
+        <a [href]="getAdjuntoUrl(adjunto.idAdjunto)" target="_blank" rel="noopener noreferrer">
+          <img
+            *ngIf="!imageLoadErrors[adjunto.idAdjunto]"
+            class="attachment-image"
+            [src]="getAdjuntoUrl(adjunto.idAdjunto)"
+            [alt]="adjunto.nombreArchivoOriginal"
+            (error)="markImageError(adjunto.idAdjunto)">
+          <span *ngIf="imageLoadErrors[adjunto.idAdjunto]">{{ 'attachments.viewImage' | translate }}</span>
+        </a>
+        <div><strong>{{ 'attachments.originalName' | translate }}:</strong> {{ adjunto.nombreArchivoOriginal }}</div>
+        <div><strong>{{ 'attachments.uploadDate' | translate }}:</strong> {{ adjunto.fechaSubida | date:'dd/MM/yyyy HH:mm' }}</div>
+        <div><strong>{{ 'attachments.size' | translate }}:</strong> {{ formatBytes(adjunto.tamanoBytes) }}</div>
+      </article>
+    </div>
+  </section>
 </section>
 
 <ng-template #detailState>

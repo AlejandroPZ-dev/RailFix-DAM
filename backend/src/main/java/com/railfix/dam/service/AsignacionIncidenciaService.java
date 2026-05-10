@@ -99,7 +99,7 @@ public class AsignacionIncidenciaService {
                 "ASIGNADA",
                 estadoAnterior.name(),
                 incidencia.getEstado().name(),
-                "Tecnico " + tecnico.getNombre() + " " + tecnico.getApellidos() + " asignado a la incidencia"
+                "Técnico " + tecnico.getNombre() + " " + tecnico.getApellidos() + " asignado a la incidencia"
             );
         }
 
@@ -131,7 +131,7 @@ public class AsignacionIncidenciaService {
             "TECNICO_DESASIGNADO",
             incidencia.getEstado().name(),
             incidencia.getEstado().name(),
-            "Tecnico " + asignacion.getTecnico().getNombre() + " "
+            "Técnico " + asignacion.getTecnico().getNombre() + " "
                 + asignacion.getTecnico().getApellidos() + " desasignado de la incidencia"
         );
 

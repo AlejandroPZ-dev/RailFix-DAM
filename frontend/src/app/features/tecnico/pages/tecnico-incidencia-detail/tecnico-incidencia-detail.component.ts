@@ -2,7 +2,9 @@ import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
+import { AdjuntoIncidencia } from '../../../../core/models/adjunto-incidencia.model';
 import { ReporteTecnico } from '../../../../core/models/reporte-tecnico.model';
+import { AdjuntosService } from '../../../../core/services/adjuntos.service';
 import { TecnicoIncidenciaDetail } from '../../../../core/models/tecnico-incidencia-detail.model';
 import { AsignacionService } from '../../../../core/services/asignacion.service';
 import { ReporteTecnicoService } from '../../../../core/services/reporte-tecnico.service';
@@ -18,12 +20,15 @@ import { ToastService } from '../../../../core/services/toast.service';
 export class TecnicoIncidenciaDetailComponent implements OnInit {
   incidencia?: TecnicoIncidenciaDetail;
   reportes: ReporteTecnico[] = [];
+  adjuntos: AdjuntoIncidencia[] = [];
   isLoading = true;
   loadErrorKey = '';
+  readonly imageLoadErrors: Record<number, boolean> = {};
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly asignacionService: AsignacionService,
+    private readonly adjuntosService: AdjuntosService,
     private readonly reporteTecnicoService: ReporteTecnicoService,
     private readonly sessionService: SessionService,
     private readonly toastService: ToastService,
@@ -48,6 +53,7 @@ export class TecnicoIncidenciaDetailComponent implements OnInit {
           this.isLoading = false;
           this.loadErrorKey = '';
           this.changeDetectorRef.detectChanges();
+          this.loadAdjuntos(id);
           this.loadReports(currentUser.idUsuario, id);
         });
       },
@@ -71,6 +77,26 @@ export class TecnicoIncidenciaDetailComponent implements OnInit {
     });
   }
 
+  getAdjuntoUrl(idAdjunto: number): string {
+    return this.adjuntosService.getAdjuntoDownloadUrl(idAdjunto);
+  }
+
+  markImageError(idAdjunto: number): void {
+    this.imageLoadErrors[idAdjunto] = true;
+  }
+
+  formatBytes(size: number): string {
+    if (size >= 1024 * 1024) {
+      return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+    }
+
+    if (size >= 1024) {
+      return `${(size / 1024).toFixed(1)} KB`;
+    }
+
+    return `${size} B`;
+  }
+
   private loadReports(tecnicoId: number, incidenciaId: number): void {
     this.reporteTecnicoService.getByTecnicoAndIncidencia(tecnicoId, incidenciaId).subscribe({
       next: (reportes) => {
@@ -83,6 +109,24 @@ export class TecnicoIncidenciaDetailComponent implements OnInit {
         console.error('Error loading technician reports', error);
         this.ngZone.run(() => {
           this.reportes = [];
+          this.changeDetectorRef.markForCheck();
+        });
+      }
+    });
+  }
+
+  private loadAdjuntos(incidenciaId: number): void {
+    this.adjuntosService.getAdjuntosByIncidencia(incidenciaId).subscribe({
+      next: (adjuntos) => {
+        this.ngZone.run(() => {
+          this.adjuntos = adjuntos;
+          this.changeDetectorRef.markForCheck();
+        });
+      },
+      error: (error) => {
+        console.error('Error loading incident attachments for technician', error);
+        this.ngZone.run(() => {
+          this.adjuntos = [];
           this.changeDetectorRef.markForCheck();
         });
       }

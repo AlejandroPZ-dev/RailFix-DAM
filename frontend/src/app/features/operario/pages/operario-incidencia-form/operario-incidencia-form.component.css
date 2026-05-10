@@ -28,12 +28,24 @@
   gap: 0.35rem;
 }
 
+.field-label.required::after {
+  content: ' *';
+  color: #b42318;
+}
+
 .form-card input,
 .form-card select,
 .form-card textarea {
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   padding: 0.75rem;
+}
+
+.form-card input.invalid-field,
+.form-card select.invalid-field,
+.form-card textarea.invalid-field {
+  border-color: #d92d20;
+  background: #fff5f5;
 }
 
 .full-width {
@@ -59,7 +71,18 @@
   cursor: default;
 }
 
-.form-card small {
+.help-text {
+  color: var(--color-text-muted);
+}
+
+.field-error {
+  color: #b42318;
+  font-size: 0.85rem;
+}
+
+.selected-files {
+  margin: 0;
+  padding-left: 1.25rem;
   color: var(--color-text-muted);
 }
 

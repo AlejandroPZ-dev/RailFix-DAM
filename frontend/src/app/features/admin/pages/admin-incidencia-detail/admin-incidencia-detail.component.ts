@@ -1,11 +1,13 @@
 import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { AdjuntoIncidencia } from '../../../../core/models/adjunto-incidencia.model';
 import { Asignacion } from '../../../../core/models/asignacion.model';
 import { AuthUser } from '../../../../core/models/auth-user.model';
 import { HistorialIncidencia } from '../../../../core/models/historial-incidencia.model';
 import { Incidencia } from '../../../../core/models/incidencia.model';
 import { ReporteTecnico } from '../../../../core/models/reporte-tecnico.model';
+import { AdjuntosService } from '../../../../core/services/adjuntos.service';
 import { AsignacionService } from '../../../../core/services/asignacion.service';
 import { HistorialIncidenciaService } from '../../../../core/services/historial-incidencia.service';
 import { IncidenciaService } from '../../../../core/services/incidencia.service';
@@ -25,6 +27,7 @@ export class AdminIncidenciaDetailComponent implements OnInit {
   asignaciones: Asignacion[] = [];
   historial: HistorialIncidencia[] = [];
   reportes: ReporteTecnico[] = [];
+  adjuntos: AdjuntoIncidencia[] = [];
   tecnicos: AuthUser[] = [];
   descriptionValue = '';
   estadoValue = 'ABIERTA';
@@ -34,12 +37,14 @@ export class AdminIncidenciaDetailComponent implements OnInit {
   isSavingDescription = false;
   isSavingStatus = false;
   isAssigning = false;
+  readonly imageLoadErrors: Record<number, boolean> = {};
 
   readonly estados = ['ABIERTA', 'ASIGNADA', 'EN_REVISION', 'RESUELTA', 'CERRADA'];
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly incidenciaService: IncidenciaService,
+    private readonly adjuntosService: AdjuntosService,
     private readonly asignacionService: AsignacionService,
     private readonly historialIncidenciaService: HistorialIncidenciaService,
     private readonly reporteTecnicoService: ReporteTecnicoService,
@@ -215,10 +220,31 @@ export class AdminIncidenciaDetailComponent implements OnInit {
     });
   }
 
+  getAdjuntoUrl(idAdjunto: number): string {
+    return this.adjuntosService.getAdjuntoDownloadUrl(idAdjunto);
+  }
+
+  markImageError(idAdjunto: number): void {
+    this.imageLoadErrors[idAdjunto] = true;
+  }
+
+  formatBytes(size: number): string {
+    if (size >= 1024 * 1024) {
+      return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+    }
+
+    if (size >= 1024) {
+      return `${(size / 1024).toFixed(1)} KB`;
+    }
+
+    return `${size} B`;
+  }
+
   private refreshDetail(id: number): void {
     this.isLoading = true;
     this.loadError = false;
     this.loadIncidencia(id);
+    this.loadAdjuntos(id);
     this.loadAsignaciones(id);
     this.loadHistorial(id);
     this.loadReportes(id);
@@ -256,6 +282,21 @@ export class AdminIncidenciaDetailComponent implements OnInit {
       error: (error) => {
         console.error('Error loading assignments', error);
         this.asignaciones = [];
+      }
+    });
+  }
+
+  private loadAdjuntos(id: number): void {
+    this.adjuntosService.getAdjuntosByIncidencia(id).subscribe({
+      next: (adjuntos) => {
+        this.ngZone.run(() => {
+          this.adjuntos = adjuntos;
+          this.changeDetectorRef.markForCheck();
+        });
+      },
+      error: (error) => {
+        console.error('Error loading incident attachments', error);
+        this.adjuntos = [];
       }
     });
   }

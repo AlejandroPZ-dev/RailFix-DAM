@@ -98,7 +98,7 @@ public class ReporteTecnicoService {
             "REPORTE_TECNICO",
             incidencia.getEstado().name(),
             incidencia.getEstado().name(),
-            "Reporte tecnico recibido"
+            "Reporte técnico recibido"
         );
 
         return Optional.of(toResponse(saved));

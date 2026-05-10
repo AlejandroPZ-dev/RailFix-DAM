@@ -7,8 +7,14 @@
 
   <form class="form-card" [formGroup]="form" (ngSubmit)="submit()">
     <label class="full-width">
-      <span>{{ 'tecnico.report.fields.descripcionReporte' | translate }}</span>
-      <textarea rows="5" formControlName="descripcionReporte"></textarea>
+      <span class="field-label required">{{ 'tecnico.report.fields.descripcionReporte' | translate }}</span>
+      <textarea rows="5" formControlName="descripcionReporte" [class.invalid-field]="form.controls.descripcionReporte.touched && form.controls.descripcionReporte.invalid"></textarea>
+      <small class="field-error" *ngIf="form.controls.descripcionReporte.touched && form.controls.descripcionReporte.hasError('required')">
+        {{ 'common.requiredField' | translate }}
+      </small>
+      <small class="field-error" *ngIf="form.controls.descripcionReporte.touched && form.controls.descripcionReporte.hasError('minlength')">
+        {{ 'common.minimumCharacters' | translate:{ count: 10 } }}
+      </small>
     </label>
 
     <label>

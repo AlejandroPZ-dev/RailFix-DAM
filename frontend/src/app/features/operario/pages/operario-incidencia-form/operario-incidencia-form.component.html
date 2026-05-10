@@ -6,51 +6,80 @@
 
   <form class="form-card" [formGroup]="form" (ngSubmit)="submit()">
     <label>
-      <span>{{ 'operario.form.fields.linea' | translate }}</span>
-      <select formControlName="lineaId">
+      <span class="field-label required">{{ 'operario.form.fields.linea' | translate }}</span>
+      <select formControlName="lineaId" [class.invalid-field]="form.controls.lineaId.touched && form.controls.lineaId.invalid">
         <option [ngValue]="0">{{ 'operario.form.selectPlaceholder' | translate }}</option>
         <option *ngFor="let linea of lineas" [ngValue]="linea.id">
           {{ linea.nombre }}
         </option>
       </select>
+      <small class="field-error" *ngIf="form.controls.lineaId.touched && form.controls.lineaId.invalid">
+        {{ 'common.requiredField' | translate }}
+      </small>
     </label>
 
     <label>
-      <span>{{ 'operario.form.fields.via' | translate }}</span>
-      <select formControlName="viaId">
+      <span class="field-label required">{{ 'operario.form.fields.via' | translate }}</span>
+      <select formControlName="viaId" [class.invalid-field]="form.controls.viaId.touched && form.controls.viaId.invalid">
         <option [ngValue]="0">{{ 'operario.form.selectPlaceholder' | translate }}</option>
         <option *ngFor="let via of vias" [ngValue]="via.id">
           {{ via.nombre }}
         </option>
       </select>
-    </label>
-
-    <label class="full-width">
-      <span>{{ 'operario.form.fields.puntoKilometrico' | translate }}</span>
-      <input type="number" step="0.01" formControlName="puntoKilometrico">
-      <small *ngIf="selectedLinea">
-        {{ 'operario.form.pkRange' | translate:{ min: selectedLinea.pkInicial, max: selectedLinea.pkFinal } }}
+      <small class="field-error" *ngIf="form.controls.viaId.touched && form.controls.viaId.invalid">
+        {{ 'common.requiredField' | translate }}
       </small>
     </label>
 
     <label class="full-width">
-      <span>{{ 'operario.form.fields.titulo' | translate }}</span>
-      <input type="text" formControlName="titulo">
+      <span class="field-label required">{{ 'operario.form.fields.puntoKilometrico' | translate }}</span>
+      <input type="number" step="0.01" formControlName="puntoKilometrico" [class.invalid-field]="form.controls.puntoKilometrico.touched && form.controls.puntoKilometrico.invalid">
+      <small *ngIf="selectedLinea">
+        {{ 'operario.form.pkRange' | translate:{ min: selectedLinea.pkInicial, max: selectedLinea.pkFinal } }}
+      </small>
+      <small class="field-error" *ngIf="form.controls.puntoKilometrico.touched && form.controls.puntoKilometrico.invalid">
+        {{ 'common.requiredField' | translate }}
+      </small>
     </label>
 
     <label class="full-width">
-      <span>{{ 'operario.form.fields.descripcion' | translate }}</span>
-      <textarea rows="5" formControlName="descripcion"></textarea>
+      <span class="field-label required">{{ 'operario.form.fields.titulo' | translate }}</span>
+      <input type="text" formControlName="titulo" [class.invalid-field]="form.controls.titulo.touched && form.controls.titulo.invalid">
+      <small class="field-error" *ngIf="form.controls.titulo.touched && form.controls.titulo.hasError('required')">
+        {{ 'common.requiredField' | translate }}
+      </small>
+    </label>
+
+    <label class="full-width">
+      <span class="field-label required">{{ 'operario.form.fields.descripcion' | translate }}</span>
+      <textarea rows="5" formControlName="descripcion" [class.invalid-field]="form.controls.descripcion.touched && form.controls.descripcion.invalid"></textarea>
+      <small class="field-error" *ngIf="form.controls.descripcion.touched && form.controls.descripcion.hasError('required')">
+        {{ 'common.requiredField' | translate }}
+      </small>
     </label>
 
     <label>
-      <span>{{ 'operario.form.fields.urgencia' | translate }}</span>
-      <select formControlName="urgencia">
+      <span class="field-label required">{{ 'operario.form.fields.urgencia' | translate }}</span>
+      <select formControlName="urgencia" [class.invalid-field]="form.controls.urgencia.touched && form.controls.urgencia.invalid">
         <option [ngValue]="''">{{ 'operario.form.selectPlaceholder' | translate }}</option>
         <option *ngFor="let urgencia of urgencias" [ngValue]="urgencia">
           {{ ('incidenciaUrgencia.' + urgencia) | translate }}
         </option>
       </select>
+      <small class="field-error" *ngIf="form.controls.urgencia.touched && form.controls.urgencia.invalid">
+        {{ 'common.requiredField' | translate }}
+      </small>
+    </label>
+
+    <label class="full-width">
+      <span>{{ 'operario.form.fields.adjuntos' | translate }}</span>
+      <input type="file" accept="image/*" capture="environment" multiple (change)="onFilesSelected($event)">
+      <small class="help-text">{{ 'operario.form.attachments.maxFiles' | translate }}</small>
+      <small class="help-text">{{ 'operario.form.attachments.maxSize' | translate }}</small>
+      <small class="help-text">{{ 'operario.form.attachments.allowedTypes' | translate }}</small>
+      <ul *ngIf="selectedFiles.length > 0" class="selected-files">
+        <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+      </ul>
     </label>
 
     <div class="actions full-width">

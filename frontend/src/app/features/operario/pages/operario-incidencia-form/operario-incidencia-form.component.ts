@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { AdjuntosService } from '../../../../core/services/adjuntos.service';
 import { Linea } from '../../../../core/models/linea.model';
 import { Via } from '../../../../core/models/via.model';
 import { IncidenciaService } from '../../../../core/services/incidencia.service';
@@ -17,8 +18,13 @@ import { ViaService } from '../../../../core/services/via.service';
   standalone: false
 })
 export class OperarioIncidenciaFormComponent implements OnInit {
+  private static readonly MAX_FILES = 3;
+  private static readonly MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+  private static readonly ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
   lineas: Linea[] = [];
   vias: Via[] = [];
+  selectedFiles: File[] = [];
   isSubmitting = false;
   readonly urgencias = ['BAJA', 'MEDIA', 'ALTA', 'CRITICA'];
 
@@ -36,6 +42,7 @@ export class OperarioIncidenciaFormComponent implements OnInit {
     private readonly lineaService: LineaService,
     private readonly viaService: ViaService,
     private readonly incidenciaService: IncidenciaService,
+    private readonly adjuntosService: AdjuntosService,
     private readonly sessionService: SessionService,
     private readonly toastService: ToastService,
     private readonly router: Router
@@ -60,6 +67,36 @@ export class OperarioIncidenciaFormComponent implements OnInit {
 
   get selectedLinea(): Linea | undefined {
     return this.lineas.find((linea) => linea.id === Number(this.form.controls.lineaId.value));
+  }
+
+  onFilesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = Array.from(input.files ?? []);
+
+    if (files.length > OperarioIncidenciaFormComponent.MAX_FILES) {
+      this.selectedFiles = [];
+      input.value = '';
+      this.showError('operario.form.errors.maxFiles');
+      return;
+    }
+
+    const hasInvalidType = files.some((file) => !OperarioIncidenciaFormComponent.ALLOWED_TYPES.includes(file.type));
+    if (hasInvalidType) {
+      this.selectedFiles = [];
+      input.value = '';
+      this.showError('operario.form.errors.invalidImageType');
+      return;
+    }
+
+    const hasInvalidSize = files.some((file) => file.size > OperarioIncidenciaFormComponent.MAX_FILE_SIZE_BYTES);
+    if (hasInvalidSize) {
+      this.selectedFiles = [];
+      input.value = '';
+      this.showError('operario.form.errors.invalidImageSize');
+      return;
+    }
+
+    this.selectedFiles = files;
   }
 
   submit(): void {
@@ -115,27 +152,68 @@ export class OperarioIncidenciaFormComponent implements OnInit {
       descripcion: this.form.controls.descripcion.value,
       urgencia: this.form.controls.urgencia.value
     }).subscribe({
+      next: (incidencia) => {
+        if (this.selectedFiles.length === 0) {
+          this.toastService.show({
+            id: 0,
+            type: 'success',
+            titleKey: 'toast.success.title',
+            messageKey: 'operario.form.success'
+          });
+          this.router.navigate(['/operario/incidencias']);
+          return;
+        }
+
+        this.uploadAdjuntos(incidencia.id, currentUser.idUsuario);
+      },
+      error: (error) => {
+        console.error('Error creating incident', error);
+        this.isSubmitting = false;
+        this.showError('operario.form.errors.createFailed');
+      },
+      complete: () => {
+        if (this.selectedFiles.length === 0) {
+          this.isSubmitting = false;
+        }
+      }
+    });
+  }
+
+  private uploadAdjuntos(idIncidencia: number, idUsuario: number): void {
+    this.adjuntosService.uploadAdjuntos(idIncidencia, this.selectedFiles, idUsuario).subscribe({
       next: () => {
         this.toastService.show({
           id: 0,
           type: 'success',
           titleKey: 'toast.success.title',
-          messageKey: 'operario.form.success'
+          messageKey: this.selectedFiles.length === 1
+            ? 'operario.form.attachments.uploadSuccessOne'
+            : 'operario.form.attachments.uploadSuccessMany'
         });
         this.router.navigate(['/operario/incidencias']);
       },
-      error: () => {
-        this.isSubmitting = false;
+      error: (error) => {
+        console.error('Error uploading incident attachments', error);
         this.toastService.show({
           id: 0,
-          type: 'error',
-          titleKey: 'toast.error.title',
-          messageKey: 'operario.form.errors.createFailed'
+          type: 'info',
+          titleKey: 'toast.info.title',
+          messageKey: 'operario.form.attachments.uploadWarning'
         });
+        this.router.navigate(['/operario/incidencias']);
       },
       complete: () => {
         this.isSubmitting = false;
       }
+    });
+  }
+
+  private showError(messageKey: string): void {
+    this.toastService.show({
+      id: 0,
+      type: 'error',
+      titleKey: 'toast.error.title',
+      messageKey
     });
   }
 }

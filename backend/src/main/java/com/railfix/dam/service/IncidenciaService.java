@@ -182,7 +182,7 @@ public class IncidenciaService {
             "ACTUALIZADA",
             saved.getEstado().name(),
             saved.getEstado().name(),
-            "Descripcion de la incidencia modificada"
+            "Descripción de la incidencia modificada"
         );
 
         return Optional.of(toResponse(saved));

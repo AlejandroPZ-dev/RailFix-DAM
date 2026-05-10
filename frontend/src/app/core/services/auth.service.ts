@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { API_BASE_URL } from '../config/api.config';
 import { AuthUser } from '../models/auth-user.model';
 
 type LoginPayload = {
@@ -13,7 +14,7 @@ type LoginPayload = {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:8080/api';
+  private readonly apiUrl = API_BASE_URL;
 
   constructor(private readonly httpClient: HttpClient) {}
 
@@ -21,4 +22,3 @@ export class AuthService {
     return this.httpClient.post<AuthUser>(`${this.apiUrl}/auth/login`, payload);
   }
 }
-

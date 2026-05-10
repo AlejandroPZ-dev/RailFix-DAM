@@ -18,13 +18,19 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="submit()">
       <label>
-        <span>{{ 'login.username' | translate }}</span>
-        <input type="text" formControlName="username">
+        <span class="field-label required">{{ 'login.username' | translate }}</span>
+        <input type="text" formControlName="username" [class.invalid-field]="loginForm.controls.username.touched && loginForm.controls.username.invalid">
+        <small class="field-error" *ngIf="loginForm.controls.username.touched && loginForm.controls.username.hasError('required')">
+          {{ 'common.requiredField' | translate }}
+        </small>
       </label>
 
       <label>
-        <span>{{ 'login.password' | translate }}</span>
-        <input type="password" formControlName="password">
+        <span class="field-label required">{{ 'login.password' | translate }}</span>
+        <input type="password" formControlName="password" [class.invalid-field]="loginForm.controls.password.touched && loginForm.controls.password.invalid">
+        <small class="field-error" *ngIf="loginForm.controls.password.touched && loginForm.controls.password.hasError('required')">
+          {{ 'common.requiredField' | translate }}
+        </small>
       </label>
 
       <button type="submit" [disabled]="isSubmitting">

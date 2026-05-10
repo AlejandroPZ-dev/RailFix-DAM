@@ -65,10 +65,25 @@ label {
   gap: 0.35rem;
 }
 
+.field-label.required::after {
+  content: ' *';
+  color: #b42318;
+}
+
 input {
   border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   padding: 0.75rem;
+}
+
+input.invalid-field {
+  border-color: #d92d20;
+  background: #fff5f5;
+}
+
+.field-error {
+  color: #b42318;
+  font-size: 0.85rem;
 }
 
 button {

@@ -1,54 +1,59 @@
 # RailFix DAM
 
-Initial project structure for the RailFix DAM application.
+RailFix DAM es una aplicación web sencilla para la gestión de incidencias de mantenimiento ferroviario.
 
-This repository contains:
+Este repositorio contiene:
 
-- `frontend/`: Angular frontend skeleton
-- `backend/`: Spring Boot backend skeleton
+- `frontend/`: aplicación Angular
+- `backend/`: API REST con Spring Boot
+- `database/scripts/`: scripts SQL manuales para PostgreSQL
+- `docker/`: configuración de Docker Compose para la base de datos
 
-## Requirements
+## Requisitos
 
 Frontend:
 
-- Node.js 20 or newer
-- npm 10 or newer
+- Node.js 20 o superior
+- npm 10 o superior
 
 Backend:
 
-- Java 17 or newer
-- Maven 3.9 or newer
-- PostgreSQL
-- Docker Desktop or Docker Engine
+- Java 17 o superior
+- Maven 3.9 o superior
 
-## Run PostgreSQL with Docker
+Base de datos:
+
+- PostgreSQL
+- Docker Desktop o Docker Engine
+
+## Arrancar PostgreSQL con Docker
 
 ```bash
 cd docker
 docker compose up -d
 ```
 
-PostgreSQL will be available with:
+PostgreSQL quedará disponible con estos valores:
 
 - Host: `localhost`
-- Port: `5433`
-- Database: `railfix_dam`
-- User: `postgres`
-- Password: `postgres`
+- Puerto: `5433`
+- Base de datos: `railfix_dam`
+- Usuario: `postgres`
+- Contraseña: `postgres`
 
-The backend includes an initial test dataset for:
+El backend carga datos iniciales de prueba para:
 
 - `usuarios`
 - `lineas`
 - `vias`
 - `incidencias`
 
-Important:
+Notas sobre los datos de prueba:
 
-- The sample data is loaded by Spring Boot on startup after the tables are available.
-- The inserts use `ON CONFLICT DO NOTHING`, so they can be re-run safely during development.
+- Spring Boot los carga al arrancar cuando las tablas ya existen.
+- Los inserts usan `ON CONFLICT DO NOTHING`, por lo que pueden ejecutarse varias veces durante el desarrollo sin duplicar datos.
 
-## Run the frontend
+## Arrancar el frontend
 
 ```bash
 cd frontend
@@ -56,34 +61,50 @@ npm install
 npm start
 ```
 
-The Angular app will run on `http://localhost:4200`.
+La aplicación Angular quedará disponible en:
 
-## Run the backend
+- `http://localhost:4200`
 
-Update the PostgreSQL values in `backend/src/main/resources/application.properties` if needed.
+Si quieres probar la aplicación desde otros dispositivos de la misma red local:
+
+```bash
+cd frontend
+npm start -- --host 0.0.0.0
+```
+
+## Arrancar el backend
+
+Antes de probar la subida de imágenes en incidencias:
+
+- Debes ejecutar manualmente el script `database/scripts/003_create_adjuntos_incidencia.sql` en PostgreSQL usando DBeaver.
+- Este cambio no se aplica automáticamente desde la aplicación.
+
+Si lo necesitas, revisa los valores de conexión en `backend/src/main/resources/application.properties`.
 
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
-The API will run on `http://localhost:8080/api`.
+La API quedará disponible en:
 
-Swagger UI will be available at:
+- `http://localhost:8080/api`
+
+Swagger UI:
 
 - `http://localhost:8080/api/swagger-ui.html`
 
-OpenAPI JSON will be available at:
+OpenAPI JSON:
 
 - `http://localhost:8080/api/v3/api-docs`
 
-## Test login users
+## Usuarios de prueba
 
-All sample users use the password:
+Todos los usuarios de prueba usan esta contraseña:
 
 - `1234`
 
-Available usernames:
+Usuarios disponibles:
 
 - `operario1`
 - `operario2`
@@ -92,10 +113,30 @@ Available usernames:
 - `tecnico1`
 - `tecnico2`
 
-## Notes
+## Adjuntos de imágenes en incidencias
 
-- This is only the base structure.
-- Authentication logic is not implemented yet.
-- Business logic is not implemented yet.
-- The frontend includes prepared i18n support with Spanish as default and English as secondary language.
-- Docker Compose is used only for the PostgreSQL database.
+La aplicación permite adjuntar imágenes opcionales a las incidencias.
+
+Reglas actuales:
+
+- máximo 3 imágenes por incidencia
+- tamaño máximo de 5 MB por imagen
+- formatos permitidos: JPG, PNG y WEBP
+
+Funcionamiento técnico:
+
+- los archivos se guardan en `backend/uploads/`
+- PostgreSQL solo almacena metadatos y la ruta relativa del archivo
+- no se almacenan imágenes como BLOB ni BYTEA
+
+Importante:
+
+- `uploads/` y `backend/uploads/` no deben subirse a Git
+- si ejecutas el script `database/scripts/003_create_adjuntos_incidencia.sql`, hazlo manualmente en DBeaver antes de probar esta funcionalidad
+
+## Notas del proyecto
+
+- El proyecto está planteado como una aplicación DAM, con soluciones simples y mantenibles.
+- Docker Compose se usa solo para PostgreSQL.
+- La interfaz soporta español por defecto e inglés como idioma secundario.
+- La lógica principal del MVP ya está implementada para operario, administrador y técnico.
