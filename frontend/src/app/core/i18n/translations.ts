@@ -43,6 +43,17 @@ export const translations = {
       uploadDate: 'Fecha de subida',
       size: 'Tamaño'
     },
+    location: {
+      title: 'Ubicación',
+      open: 'Abrir ubicación',
+      latitude: 'Latitud',
+      longitude: 'Longitud',
+      gpsAccuracy: 'Precisión GPS',
+      metres: 'metros',
+      unavailable: 'No hay ubicación registrada para esta incidencia',
+      openError: 'No se pudo abrir la ubicación',
+      openUnavailable: 'No es posible abrir la ubicación'
+    },
     nav: {
       operarioDashboard: 'Panel operario',
       operarioIncidencias: 'Consultar incidencias',
@@ -145,6 +156,12 @@ export const translations = {
           uploadSuccessOne: 'Imagen subida correctamente',
           uploadSuccessMany: 'Las imágenes se subieron correctamente',
           uploadWarning: 'La incidencia se creó correctamente, pero no se pudieron subir algunas imágenes.'
+        },
+        location: {
+          unsupported: 'Este navegador no permite obtener la ubicación. La incidencia se guardará sin coordenadas.',
+          insecureContext: 'No es posible solicitar la ubicación desde esta conexión. Usa HTTPS o localhost para permitir geolocalización.',
+          permissionDenied: 'No se ha concedido permiso para la ubicación. La incidencia se guardará sin coordenadas.',
+          unavailable: 'No se ha podido obtener la ubicación. La incidencia se guardará sin coordenadas.'
         },
         errors: {
           invalidForm: 'Debes completar todos los campos obligatorios.',
@@ -408,6 +425,17 @@ export const translations = {
       uploadDate: 'Upload date',
       size: 'Size'
     },
+    location: {
+      title: 'Location',
+      open: 'Open location',
+      latitude: 'Latitude',
+      longitude: 'Longitude',
+      gpsAccuracy: 'GPS accuracy',
+      metres: 'metres',
+      unavailable: 'No location is registered for this incident',
+      openError: 'Could not open the location',
+      openUnavailable: 'It is not possible to open the location'
+    },
     nav: {
       operarioDashboard: 'Operator dashboard',
       operarioIncidencias: 'Browse incidents',
@@ -510,6 +538,12 @@ export const translations = {
           uploadSuccessOne: 'Image uploaded successfully',
           uploadSuccessMany: 'Images uploaded successfully',
           uploadWarning: 'The incident was created successfully, but some images could not be uploaded.'
+        },
+        location: {
+          unsupported: 'This browser cannot get the location. The incident will be saved without coordinates.',
+          insecureContext: 'Location cannot be requested from this connection. Use HTTPS or localhost to allow geolocation.',
+          permissionDenied: 'Location permission was not granted. The incident will be saved without coordinates.',
+          unavailable: 'The location could not be obtained. The incident will be saved without coordinates.'
         },
         errors: {
           invalidForm: 'You must complete all required fields.',

@@ -98,6 +98,9 @@ public class IncidenciaService {
         incidencia.setPuntoKilometrico(request.getPuntoKilometrico());
         incidencia.setTitulo(request.getTitulo().trim());
         incidencia.setDescripcion(request.getDescripcion().trim());
+        incidencia.setLatitud(request.getLatitud());
+        incidencia.setLongitud(request.getLongitud());
+        incidencia.setPrecisionGpsMetros(request.getPrecisionGpsMetros());
         try {
             incidencia.setUrgencia(UrgenciaIncidencia.valueOf(request.getUrgencia()));
         } catch (IllegalArgumentException exception) {
@@ -271,6 +274,9 @@ public class IncidenciaService {
             incidencia.getDescripcion(),
             incidencia.getUrgencia().name(),
             incidencia.getEstado().name(),
+            incidencia.getLatitud(),
+            incidencia.getLongitud(),
+            incidencia.getPrecisionGpsMetros(),
             incidencia.getFechaCreacion(),
             incidencia.getFechaActualizacion(),
             incidencia.getFechaCierre()

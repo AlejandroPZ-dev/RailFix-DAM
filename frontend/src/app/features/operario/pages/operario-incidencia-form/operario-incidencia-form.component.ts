@@ -21,6 +21,8 @@ export class OperarioIncidenciaFormComponent implements OnInit {
   private static readonly MAX_FILES = 3;
   private static readonly MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
   private static readonly ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+  private static readonly MAX_LOCATION_ATTEMPTS = 3;
+  private static readonly TARGET_ACCURACY_METERS = 50;
 
   lineas: Linea[] = [];
   vias: Via[] = [];
@@ -143,14 +145,39 @@ export class OperarioIncidenciaFormComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    this.incidenciaService.create({
+    this.getCurrentLocation()
+      .then((location) => {
+        this.createIncidencia(currentUser.idUsuario, puntoKilometrico, location ?? undefined);
+      })
+      .catch((error: { messageKey: string }) => {
+        this.toastService.show({
+          id: 0,
+          type: 'info',
+          titleKey: 'toast.info.title',
+          messageKey: error.messageKey
+        });
+        this.createIncidencia(currentUser.idUsuario, puntoKilometrico);
+      });
+  }
+
+  private createIncidencia(
+    operarioCreadorId: number,
+    puntoKilometrico: number,
+    location?: { latitud: number; longitud: number; precisionGpsMetros: number }
+  ): void {
+    const payload = {
       lineaId: Number(this.form.controls.lineaId.value),
       viaId: Number(this.form.controls.viaId.value),
-      operarioCreadorId: currentUser.idUsuario,
+      operarioCreadorId,
       puntoKilometrico,
       titulo: this.form.controls.titulo.value,
       descripcion: this.form.controls.descripcion.value,
-      urgencia: this.form.controls.urgencia.value
+      urgencia: this.form.controls.urgencia.value,
+      ...(location ?? {})
+    };
+
+    this.incidenciaService.create({
+      ...payload
     }).subscribe({
       next: (incidencia) => {
         if (this.selectedFiles.length === 0) {
@@ -164,7 +191,7 @@ export class OperarioIncidenciaFormComponent implements OnInit {
           return;
         }
 
-        this.uploadAdjuntos(incidencia.id, currentUser.idUsuario);
+        this.uploadAdjuntos(incidencia.id, operarioCreadorId);
       },
       error: (error) => {
         console.error('Error creating incident', error);
@@ -176,6 +203,74 @@ export class OperarioIncidenciaFormComponent implements OnInit {
           this.isSubmitting = false;
         }
       }
+    });
+  }
+
+  private getCurrentLocation(): Promise<{ latitud: number; longitud: number; precisionGpsMetros: number } | null> {
+    if (!window.isSecureContext) {
+      return Promise.reject({ messageKey: 'operario.form.location.insecureContext' });
+    }
+
+    if (!navigator.geolocation) {
+      return Promise.reject({ messageKey: 'operario.form.location.unsupported' });
+    }
+
+    return this.getBestAvailableLocation();
+  }
+
+  private async getBestAvailableLocation(): Promise<{ latitud: number; longitud: number; precisionGpsMetros: number } | null> {
+    let bestLocation: { latitud: number; longitud: number; precisionGpsMetros: number } | null = null;
+
+    for (let attempt = 0; attempt < OperarioIncidenciaFormComponent.MAX_LOCATION_ATTEMPTS; attempt += 1) {
+      try {
+        const location = await this.requestSingleLocation();
+        if (!bestLocation || location.precisionGpsMetros < bestLocation.precisionGpsMetros) {
+          bestLocation = location;
+        }
+
+        if (location.precisionGpsMetros <= OperarioIncidenciaFormComponent.TARGET_ACCURACY_METERS) {
+          return location;
+        }
+      } catch (error: any) {
+        if (error?.messageKey === 'operario.form.location.permissionDenied') {
+          throw error;
+        }
+      }
+    }
+
+    if (bestLocation) {
+      return bestLocation;
+    }
+
+    throw { messageKey: 'operario.form.location.unavailable' };
+  }
+
+  private requestSingleLocation(): Promise<{ latitud: number; longitud: number; precisionGpsMetros: number }> {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            latitud: position.coords.latitude,
+            longitud: position.coords.longitude,
+            precisionGpsMetros: position.coords.accuracy
+          });
+        },
+        (error) => {
+          console.warn('Could not obtain browser geolocation', error);
+
+          if (error.code === error.PERMISSION_DENIED) {
+            reject({ messageKey: 'operario.form.location.permissionDenied' });
+            return;
+          }
+
+          reject({ messageKey: 'operario.form.location.unavailable' });
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
     });
   }
 

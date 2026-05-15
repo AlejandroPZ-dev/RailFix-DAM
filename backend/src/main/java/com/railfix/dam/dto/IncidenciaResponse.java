@@ -17,6 +17,9 @@ public class IncidenciaResponse {
     private String descripcion;
     private String urgencia;
     private String estado;
+    private BigDecimal latitud;
+    private BigDecimal longitud;
+    private BigDecimal precisionGpsMetros;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
     private LocalDateTime fechaCierre;
@@ -34,6 +37,9 @@ public class IncidenciaResponse {
         String descripcion,
         String urgencia,
         String estado,
+        BigDecimal latitud,
+        BigDecimal longitud,
+        BigDecimal precisionGpsMetros,
         LocalDateTime fechaCreacion,
         LocalDateTime fechaActualizacion,
         LocalDateTime fechaCierre
@@ -50,6 +56,9 @@ public class IncidenciaResponse {
         this.descripcion = descripcion;
         this.urgencia = urgencia;
         this.estado = estado;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.precisionGpsMetros = precisionGpsMetros;
         this.fechaCreacion = fechaCreacion;
         this.fechaActualizacion = fechaActualizacion;
         this.fechaCierre = fechaCierre;
@@ -101,6 +110,18 @@ public class IncidenciaResponse {
 
     public String getEstado() {
         return estado;
+    }
+
+    public BigDecimal getLatitud() {
+        return latitud;
+    }
+
+    public BigDecimal getLongitud() {
+        return longitud;
+    }
+
+    public BigDecimal getPrecisionGpsMetros() {
+        return precisionGpsMetros;
     }
 
     public LocalDateTime getFechaCreacion() {

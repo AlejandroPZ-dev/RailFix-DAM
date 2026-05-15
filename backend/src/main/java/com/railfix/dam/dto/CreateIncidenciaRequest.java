@@ -27,6 +27,12 @@ public class CreateIncidenciaRequest {
     @NotBlank
     private String urgencia;
 
+    private BigDecimal latitud;
+
+    private BigDecimal longitud;
+
+    private BigDecimal precisionGpsMetros;
+
     public Long getLineaId() {
         return lineaId;
     }
@@ -82,5 +88,28 @@ public class CreateIncidenciaRequest {
     public void setUrgencia(String urgencia) {
         this.urgencia = urgencia;
     }
-}
 
+    public BigDecimal getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(BigDecimal latitud) {
+        this.latitud = latitud;
+    }
+
+    public BigDecimal getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(BigDecimal longitud) {
+        this.longitud = longitud;
+    }
+
+    public BigDecimal getPrecisionGpsMetros() {
+        return precisionGpsMetros;
+    }
+
+    public void setPrecisionGpsMetros(BigDecimal precisionGpsMetros) {
+        this.precisionGpsMetros = precisionGpsMetros;
+    }
+}

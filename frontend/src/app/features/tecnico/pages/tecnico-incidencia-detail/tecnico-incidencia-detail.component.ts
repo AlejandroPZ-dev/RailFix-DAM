@@ -97,6 +97,46 @@ export class TecnicoIncidenciaDetailComponent implements OnInit {
     return `${size} B`;
   }
 
+  hasValidCoordinates(): boolean {
+    const coordinates = this.getCoordinates();
+    return coordinates !== null;
+  }
+
+  openLocation(): void {
+    const coordinates = this.getCoordinates();
+    if (!coordinates) {
+      this.toastService.show({
+        id: 0,
+        type: 'error',
+        titleKey: 'toast.error.title',
+        messageKey: 'location.openUnavailable'
+      });
+      return;
+    }
+
+    const url = `https://www.google.com/maps/search/?api=1&query=${coordinates.latitud},${coordinates.longitud}`;
+    const openedWindow = window.open(url, '_blank');
+
+    if (!openedWindow) {
+      console.warn('Could not open incident location for technician', coordinates);
+      this.toastService.show({
+        id: 0,
+        type: 'error',
+        titleKey: 'toast.error.title',
+        messageKey: 'location.openError'
+      });
+    }
+  }
+
+  getPrecisionValue(): number | null {
+    if (!this.incidencia || this.incidencia.precisionGpsMetros === null || this.incidencia.precisionGpsMetros === undefined) {
+      return null;
+    }
+
+    const precision = Number(this.incidencia.precisionGpsMetros);
+    return Number.isFinite(precision) ? precision : null;
+  }
+
   private loadReports(tecnicoId: number, incidenciaId: number): void {
     this.reporteTecnicoService.getByTecnicoAndIncidencia(tecnicoId, incidenciaId).subscribe({
       next: (reportes) => {
@@ -131,5 +171,33 @@ export class TecnicoIncidenciaDetailComponent implements OnInit {
         });
       }
     });
+  }
+
+  private getCoordinates(): { latitud: number; longitud: number } | null {
+    if (!this.incidencia) {
+      return null;
+    }
+
+    if (
+      this.incidencia.latitud === null
+      || this.incidencia.latitud === undefined
+      || this.incidencia.longitud === null
+      || this.incidencia.longitud === undefined
+    ) {
+      return null;
+    }
+
+    const latitud = Number(this.incidencia.latitud);
+    const longitud = Number(this.incidencia.longitud);
+
+    if (!Number.isFinite(latitud) || !Number.isFinite(longitud)) {
+      return null;
+    }
+
+    if (latitud < -90 || latitud > 90 || longitud < -180 || longitud > 180) {
+      return null;
+    }
+
+    return { latitud, longitud };
   }
 }

@@ -13,6 +13,9 @@ type CreateIncidenciaPayload = {
   titulo: string;
   descripcion: string;
   urgencia: string;
+  latitud?: number;
+  longitud?: number;
+  precisionGpsMetros?: number;
 };
 
 type UpdateEstadoPayload = {

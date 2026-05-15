@@ -15,7 +15,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "http://127.0.0.1:4200",
                 "http://192.168.*:4200",
                 "http://10.*:4200",
-                "http://172.*:4200"
+                "http://172.*:4200",
+                "https://railfix.arkamax.es"
             )
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             .allowedHeaders("*");

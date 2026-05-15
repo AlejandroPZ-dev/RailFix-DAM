@@ -20,6 +20,24 @@
   </section>
 
   <section class="detail-card">
+    <h3>{{ 'location.title' | translate }}</h3>
+
+    <div *ngIf="hasValidCoordinates(); else noTecnicoLocation" class="location-grid">
+      <div><strong>{{ 'location.latitude' | translate }}:</strong> {{ incidencia.latitud }}</div>
+      <div><strong>{{ 'location.longitude' | translate }}:</strong> {{ incidencia.longitud }}</div>
+      <div><strong>{{ 'location.gpsAccuracy' | translate }}:</strong> {{ getPrecisionValue() ?? '-' }}<span *ngIf="getPrecisionValue() !== null"> {{ 'location.metres' | translate }}</span></div>
+    </div>
+
+    <ng-template #noTecnicoLocation>
+      <p class="muted">{{ 'location.unavailable' | translate }}</p>
+    </ng-template>
+
+    <button type="button" class="location-button" (click)="openLocation()" [disabled]="!hasValidCoordinates()">
+      {{ 'location.open' | translate }}
+    </button>
+  </section>
+
+  <section class="detail-card">
     <h3>{{ 'tecnico.detail.attachmentsTitle' | translate }}</h3>
 
     <div *ngIf="adjuntos.length === 0" class="muted">

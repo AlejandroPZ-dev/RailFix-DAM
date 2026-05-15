@@ -80,3 +80,24 @@
   border-radius: 0.5rem;
   border: 1px solid var(--color-border);
 }
+
+.location-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.location-button {
+  width: fit-content;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  background: var(--color-primary);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.location-button:disabled {
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}

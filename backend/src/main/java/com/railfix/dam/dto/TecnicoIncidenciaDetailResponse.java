@@ -15,6 +15,9 @@ public class TecnicoIncidenciaDetailResponse {
     private BigDecimal puntoKilometrico;
     private String urgencia;
     private String estado;
+    private BigDecimal latitud;
+    private BigDecimal longitud;
+    private BigDecimal precisionGpsMetros;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
     private LocalDateTime fechaCierre;
@@ -32,6 +35,9 @@ public class TecnicoIncidenciaDetailResponse {
         BigDecimal puntoKilometrico,
         String urgencia,
         String estado,
+        BigDecimal latitud,
+        BigDecimal longitud,
+        BigDecimal precisionGpsMetros,
         LocalDateTime fechaCreacion,
         LocalDateTime fechaActualizacion,
         LocalDateTime fechaCierre,
@@ -48,6 +54,9 @@ public class TecnicoIncidenciaDetailResponse {
         this.puntoKilometrico = puntoKilometrico;
         this.urgencia = urgencia;
         this.estado = estado;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.precisionGpsMetros = precisionGpsMetros;
         this.fechaCreacion = fechaCreacion;
         this.fechaActualizacion = fechaActualizacion;
         this.fechaCierre = fechaCierre;
@@ -93,6 +102,18 @@ public class TecnicoIncidenciaDetailResponse {
 
     public String getEstado() {
         return estado;
+    }
+
+    public BigDecimal getLatitud() {
+        return latitud;
+    }
+
+    public BigDecimal getLongitud() {
+        return longitud;
+    }
+
+    public BigDecimal getPrecisionGpsMetros() {
+        return precisionGpsMetros;
     }
 
     public LocalDateTime getFechaCreacion() {
